@@ -1,0 +1,166 @@
+
+Steps to host a website on AWS EC2 are very similar across 
+**Ubuntu, Amazon Linux, and Windows Server**, 
+but the **commands and tools differ** because of their OS.
+
+---
+## 1. **Ubuntu Server AMI (Debian-based)**
+Package manager: **APT**
+
+**Commands to host website:**
+1. ```bash
+# Update & install Apache or Nginx
+sudo apt update
+sudo apt install apache2 -y
+# OR
+sudo apt install nginx -y
+
+# Enable and start service
+sudo systemctl enable apache2
+sudo systemctl start apache2
+
+sudo systemctl status apache2 (check)
+
+- cd /var/www/html
+pwd - check current directory
+sudo nano index.html - Ctrl O and + X (exit)
+
+# Place website files
+sudo nano /var/www/html/index.html
+```
+
+2. ```
+ UBUNTU - shell script:
+#!/bin/bash
+
+sudo apt update -y
+sudo apt upgrade -y
+sudo apt install apache2 -y
+sudo rm /var/www/html/index.html
+echo "<h1>This is my web page - 1.</h1>" | sudo tee /var/www/html/index.html
+```
+* Website accessible at: `http://<EC2-IP>`
+---
+
+## 2. **Amazon Linux AMI / Amazon Linux 2**
+Package manager: **YUM / DNF**
+
+**Commands to host website:**
+```bash
+# Update packages
+sudo yum update -y
+
+# Install Apache (httpd)
+sudo yum install -y httpd
+
+# Enable and start Apache
+sudo systemctl status httpd
+sudo systemctl enable httpd
+sudo systemctl start httpd
+
+# Place website files
+sudo nano /var/www/html/index.html
+```
+
+* Website accessible at: `http://<EC2-IP>`
+⚠️ Key difference: **Apache service name is `httpd`** (not `apache2` like Ubuntu).
+---
+
+## 3. **Windows Server AMI**
+ - No `apt` or `yum`, it uses **Windows features**.
+
+Steps:
+-------
+Add Roles and Features (IIS Installation):-
+#### **Step 1: Open Server Manager**
+#### **Step 2: Start “Add Roles and Features Wizard”**
+1. In Server Manager, click **Manage** (top-right corner).
+2. Click **Add Roles and Features**.
+3. The **Add Roles and Features Wizard** opens.
+---
+### **Step 3: Installation Type**
+1. On the **“Before you begin”** page, click **Next**.
+2. On the **Installation Type** page:
+   * Select **Role-based or feature-based installation**.
+   * Click **Next**.
+---
+#### **Step 4: Select Destination Server**
+1. On the **Server Selection** page:
+   * Your server should be listed under **“Select a server from the server pool”**.
+   * Make sure it’s highlighted/checked.
+2. Click **Next**.
+---
+#### **Step 5: Select Server Roles**
+1. On the **Server Roles** page, scroll down and find **Web Server (IIS)**.
+2. Check the box next to **Web Server (IIS)**.
+3. A popup may appear saying **“Add features that are required for Web Server (IIS)?”**
+   * Click **Add Features**.
+4. Click **Next**.
+---
+#### **Step 6: Select Features (Optional)**
+1. On the **Features** page:
+   * You can leave defaults as-is for a basic web server.
+   * (Optional features: .NET Framework, FTP Server, etc.)
+2. Click **Next**.
+---
+#### **Step 7: Web Server Role (IIS) Information**
+1. The next page shows an overview of IIS.
+2. Just click **Next**.
+---
+#### **Step 8: Role Services**
+1. On the **Role Services** page:
+   * By default, the following are selected:
+     * **Web Server**
+     * **Common HTTP Features** (Default Document, Directory Browsing, HTTP Errors)
+     * **Health and Diagnostics**
+     * **Performance**
+     * **Security** (Request Filtering, Basic Authentication)
+     * **Management Tools** (IIS Management Console)
+   * For beginners, leave all default selections.
+2. Click **Next**.
+---
+#### **Step 9: Confirmation**
+1. Review your selections.
+2. (Optional) Check **“Restart the destination server automatically if required”**.
+3. Click **Install**.
+---
+#### **Step 10: Installation Progress**
+1. Wait for the installation to complete.
+2. After installation finishes, the page will show **Installation succeeded**.
+3. Click **Close**.
+---
+#### **Step 11: Verify IIS Installation**
+1. Open a browser on the server.
+2. Navigate to: `http://localhost`
+3. You should see the **default IIS welcome page**.
+   ✅ This confirms IIS is installed correctly.
+---
+
+## 🔑 **Key Differences Summary**
+
+| OS / AMI           | Web Server Install    | Service Name | Website Root Path     |
+| ------------------ | --------------------- | ------------ | --------------------- |
+| **Ubuntu**         | `apt install apache2` | `apache2`    | `/var/www/html/`      |
+| **Amazon Linux**   | `yum install httpd`   | `httpd`      | `/var/www/html/`      |
+| **Windows Server** | Add IIS via GUI       | `W3SVC`      | `C:\inetpub\wwwroot\` |
+---
+
+Error and Trouble shooting:
+i am having error while connecting command prompt / putty with amazon linux/ubuntu:
+
+1.when conneced to the Wi-Fi, it shows error message.
+error message: Network Error: Connection timed out? 
+
+2. but when connected to mobile hotspot it shows this:
+SUCCESS Logined!    
+,     #_
+   ~\_  ####_        Amazon Linux 2023
+  ~~  \_#####\
+  ~~     \###|
+  ~~       \#/ ___   https://aws.amazon.com/linux/amazon-linux-2023
+   ~~       V~' '->
+    ~~~         /
+      ~~._.   _/
+         _/ _/
+       _/m/'
+

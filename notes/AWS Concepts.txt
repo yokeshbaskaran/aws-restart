@@ -1,0 +1,207 @@
+AWS Topics & Concepts:
+
+EC2 - ELASTIC COMPUTE CLOUD
+1. Elastic IP: 
+	- Normally an instance has Dynamic IP which changes when restarted instance.
+		eg:  - 1st time instance has ip: 65.1.133.146
+		      - after stopped and started again has ip: 3.110.160.64
+	- To prevent we use Elastic (Static IP provide by AWS).
+	- Elastic ip: https://3.109.126.155 (cannot change until it released)
+
+Steps:
+-------
+1. Go Network & Security Section, Allocate Elastic IP address and Allocate one ip address.
+2. Associate this Elastic IP address to a EC2 instance.
+
+Delete Way (2):
+-------------------
+1. Disassociate Elastic IP address from InstanceID
+2. Release Elastic IP address
+
+2. Snapshots:- 
+	- it is used for creating AMI from another instance (like a blueprint)
+	- used to create volume for another instance (like extra storage (SSD))
+
+Delete Way (2):
+-------------------
+1. Delete (Deregister) AMI ->  2. Delete associated snapshots [or] 2. Delete Snapshots
+
+
+3. Amazon Machine Image (AMI):
+AMI is like a copy of another instance settings and configuration, we can use in another instance without entering those setting manually.
+
+Delete Way (1):
+-------------------
+1. Delete (Deregister) AMI ->  Delete associated snapshots
+
+4. Attach a volume:
+	- Like extra storage (SSD) for instance.
+Steps: 
+--------
+1. create volume based on availability zone(ap-south-1b)
+2. click attach volume and choose instance id. and done!
+
+Delete Way (2):
+-------------------
+1. De-attach volume. 2. Delete Volume
+
+5. EC2 Image Builder
+	- Amazon EC2 Image Builder is a managed service that helps you automate the creation, customization, and distribution of machine images (like AMIs for EC2 or container images).
+	- Automates creating and updating images (AMIs/containers).
+
+6. Recycle Bin for Snapshots: 
+	- Recycle Bin is an AWS feature that lets you recover accidentally deleted snapshots or EBS-backed AMIs within a defined retention period.
+	- Lets you recover deleted snapshots/AMIs within a retention period.
+
+7. Load Balancer:
+	- Balance the loads in ec2 instance
+8. Launch Template:
+9. Target Groups
+10. ASG:
+
+
+VPC concepts:- 
+1. VPC - (VIRTUAL PRIVATE CLOUD):
+	-It is a Private Virtual Network in a cloud.
+Steps: 
+--------
+	1. IPv4 CIDR 	-	give IP address (150.120.10.0 / 24) 
+	2. create a new VPC with IPv4 CIDR = 150.120.10.0 / 24.
+Delete Way (1):
+-------------------
+	1. Delete VPC -> "delete" button
+
+2. Internet gateway: 
+	- act a wire to give internet
+Steps: 
+--------
+	1. Attach to VPC 
+	2. Attach Internet gateway
+Delete Way (1):
+-------------------
+	1. Detach from VPC -> "detach" button
+
+3. NAT Gateway:
+	- for access temporary internet inside a private subnet inside a VPC.
+Steps:  
+--------
+	1.choose subnet (PUBLIC Subnet to make connection) and 
+	2. Connect type = Public and then 
+	3. assign a Elastic IP address.
+	4. Then connect to Route Table (private subnet). (if not created, create one based on Private Subnet and select "private subnet" in Routes's Edit subnet associations).
+Delete way (2):
+-------------------
+	1. NAT Gateway
+	2. Elastic IP (Release Elastic IP)
+
+4. Public Subnet to Private Subnet Connection inside a VPC.
+Steps:  
+--------
+	1. Ensure the Public subnet has IGW 
+	2.  
+	3.  
+	4.  
+Public Subnet - Route Table(RT) :
+----------------------------------------------------
+Destination 		Target
+----------------------------------------------------
+150.120.0.0/18		local
+0.0.0.0 / 0			igw-0dfd0000000	(IGW)
+----------------------------------------------------
+
+Public Subnet = Subnet associations: 
+Name 	Subnet ID				IPv4 CIDR
+---------------------------------------------------------------
+public	subnet-0abcd51			150.120.0.0/27
+
+-----------------------------------------------------------------------
+Private Subnet - (RT) :
+----------------------------------------------------
+Destination 		Target
+----------------------------------------------------
+150.120.0.0/18		local
+0.0.0.0 / 0			nat-0dfd0000000	(NAT GW)
+----------------------------------------------------
+
+Private Subnet = Subnet associations: 
+Name 	Subnet ID				IPv4 CIDR
+---------------------------------------------------------------
+private	subnet-0ba66cab		150.120.100.0/28
+
+5. Peering Connection:
+	- VPC peering connection is a networking connection between two VPCs that enables you to route traffic between them privately.
+
+Steps: 
+-------
+	1. choose VPC ID (Requester)			-	eg:- 140.150.0.0 / 20
+	2. Select another VPC to peer with
+		i) choose Account type 	(based on choice one)
+			- My Account
+			- Another Account 	(if selected, Enter "Account ID")
+		ii) choose Region		(based on choice one)
+			- This Region (eg. ap-south-1)
+			- Another Region 	(if selected, Choose "Region Name")
+	3. choose VPC ID (Accepter)			-	eg:- 200.150.0.0 / 24
+	4. after creating, select the "Accept Request" button to accept in peering.
+	5. After Accepting the peering request, go to Route tables.
+
+Route Table - (Requester - Public Subnet)
+	- 6. Copy the [Accepter VPC IP] and paste in Peering connection (pcx-) in (Requester Public Subnet).
+----------------------------------------------------
+Destination 		Target
+----------------------------------------------------
+140.150.0.0 / 20	local
+0.0.0.0 / 0			igw-0dfd0000000	(IGW)
+200.150.0.0 / 24	pcx-dfd343		(Peering)
+----------------------------------------------------
+
+Route Table - (Accepter- Private Subnet)
+	- 7. Copy the [Requester VPC IP] and paste in Peering connection (pcx-) in (Accepter Private Subnet).
+----------------------------------------------------
+Destination 		Target
+----------------------------------------------------
+200.150.0.0 / 24	local
+140.150.0.0 / 20	pcx-dfd343		(Peering)
+----------------------------------------------------
+
+ERRORs:
+-----------
+	- Avoid Overlays the IP ADDRESS with same CIDR. Becoz, If you give same IP Address with same CIDR in both VPC, it causes Overlaps.
+	- if it is in Blackhole, check the status of Peering Connection and accept the request.
+---
+Case 1 – Same CIDR size, different ranges
+* VPC A: `10.0.0.0/16` → covers `10.0.0.0 – 10.0.255.255`
+* VPC B: `10.1.0.0/16` → covers `10.1.0.0 – 10.1.255.255`
+✅ No overlap
+---
+Case 2 – Same CIDR size, overlapping ranges
+* VPC A: `10.0.0.0/16`
+* VPC B: `10.0.128.0/16`
+❌ overlap
+---
+Case 3 – Different CIDR sizes, nested
+* VPC A: `20.5.0.0/16`
+* VPC B: `20.5.0.0/18`
+❌ Overlap → the `/18` sits *inside* the `/16`.
+---
+Case 4 - Different IP with same CIDR
+VPC 1: 150.60.0.0/25
+VPC 2: 170.10.0.0/25
+✅ NO overlap
+---
+
+Delete way (2): 
+-------------------
+	1. Delete peering connection --> Delete related Route table entries.
+	2. Delete VPCs --> --> Subnets--> Route tables
+
+
+
+S3 - SIMPLE STORAGE SERVICE
+1. Bucket
+2. Object types and Permissions
+
+
+
+
+

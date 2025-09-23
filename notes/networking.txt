@@ -1,0 +1,647 @@
+NETWORKING:-
+
+	- Broadband is high-speed internet often delivered via optical fibre, which is a thin strand of glass or plastic. 
+	Multiple fibres form an optical fibre cable, used in underground communications and 
+	networks like Ethernet (used for creating Local Area Networks (LANs) with RJ45 connectors), and 
+	companies like RailTel use it to provide nationwide telecom and multimedia services.
+
+- A computer network is a collection of computing devices that are logically connected together to communicate and share resources
+- A noderefers to any device on the network. (Examples: computer, routers, printers)
+- A hostis a node that has a unique function. Other devices connect to nodes so they can access data or other services. (Example: server)
+
+Basic Units of Data
+1 bit (b) = smallest unit, either 0 or 1
+1 byte (B) = 8 bits
+1 Kilobyte (KB) = 1,024 bytes
+1 Megabyte (MB) = 1,024 KB = 1,048,576 bytes
+1 Gigabyte (GB) = 1,024 MB = 1,073,741,824 bytes
+1 Terabyte (TB) = 1,024 GB = 1,099,511,627,776 bytes
+1 Petabyte (PB) = 1,024 TB
+1 Exabyte (EB) = 1,024 PB
+1 Zettabyte (ZB) = 1,024 EB
+1 Yottabyte (YB) = 1,024 ZB
+
+-> Think of networking like sending letters:
+Your device = you, writing the letter.
+IP address = the house address you’re sending it to.
+Router = the post office deciding the delivery route.
+Packets = pieces of the letter (if it’s too big, it gets split).
+Protocols = the language/rules everyone follows to understand the message.
+
+ Absolutely! Let's break it down step by step and then I’ll give you a simple visual representation.
+
+### **How a Device Connects to a Network**
+
+1. **Device**: Your laptop or phone wants to access the internet or a local network.
+2. **Network Adapter**: Your laptop has hardware (Wi-Fi or Ethernet) that can connect to networks.
+3. **Router / Access Point**: This device sends and receives signals from your laptop and connects to the internet or local network.
+4. **ISP (Internet Service Provider)**: If connecting to the internet, the router communicates with your ISP.
+5. **Internet / Local Network**: Finally, your device can access websites, shared files, printers, or other devices.
+
+### **How We Access a Network**
+
+* **Wi-Fi**: Laptop searches for available networks → You select a network → Enter password → Connected.
+* **Ethernet (Wired)**: Plug the cable into your laptop → Router automatically gives access.
+
+### **Simple Visual Representation**
+
+```
+[ Laptop ]
+    │
+    │ Wi-Fi / Ethernet
+    ▼
+[ Router / Access Point ]
+    │
+    │ (local network / internet)
+    ▼
+[ Other Devices or Internet ]
+```
+
+**Example with Internet:**
+
+```
+[Laptop] --Wi-Fi--> [Router] --ISP--> [Internet] --> [Websites / Cloud Services]
+```
+
+So basically, your laptop talks to the router, the router talks to the ISP or other devices, and that’s how you get access.
+ 
+
+---
+
+## **What is OSI Model?**
+
+* **OSI** = Open Systems Interconnection
+* It’s a **framework** that helps us understand how data travels from one device to another.
+* There are **7 layers**, from bottom to top: **Physical → Data Link → Network → Transport → Session → Presentation → Application**
+
+---
+
+## **The 7 Layers Explained Simply**
+
+### **1. Physical Layer (Layer 1)**
+
+* **What it does:** Moves raw bits (0s and 1s) over cables, Wi-Fi, or other media.
+* **Think of it as:** The wires, signals, and electrical pulses that carry data.
+* **Example:** Ethernet cable, Wi-Fi signals, hubs.
+
+### **2. Data Link Layer (Layer 2)**
+
+* **What it does:** Packages bits into frames and handles **error detection** for data on the same network.
+* **Think of it as:** The mail carrier making sure your letter gets to the right house.
+* **Example:** Switches, MAC addresses.
+
+### **3. Network Layer (Layer 3)**
+
+* **What it does:** Decides **how data travels from one network to another** (routing).
+* **Think of it as:** Google Maps for your data, figuring out the best path.
+* **Example:** Routers, IP addresses.
+
+### **4. Transport Layer (Layer 4)**
+
+* **What it does:** Ensures **data is delivered correctly** and in order. Can split big data into smaller pieces.
+* **Think of it as:** A delivery service that ensures all boxes arrive safely.
+* **Example:** TCP (reliable), UDP (fast, less reliable).
+
+### **5. Session Layer (Layer 5)**
+
+* **What it does:** Manages **connections or sessions** between devices.
+* **Think of it as:** Starting, maintaining, and ending a phone call.
+* **Example:** Login sessions, API connections.
+
+### **6. Presentation Layer (Layer 6)**
+
+* **What it does:** Converts data into a **format your application can understand**, like encryption or compression.
+* **Think of it as:** A translator or data formatter.
+* **Example:** JPEG images, MP3 audio, SSL encryption.
+
+### **7. Application Layer (Layer 7)**
+
+* **What it does:** The layer **closest to the user**. Lets you use network services.
+* **Think of it as:** The apps you interact with.
+* **Example:** Web browser, email client, WhatsApp.
+---
+## **Mnemonic to Remember Layers**
+**"All People Seem To Need Data Processing"**
+
+* A = Application
+* P = Presentation
+* S = Session
+* T = Transport
+* N = Network
+* D = Data Link
+* P = Physical
+---
+
+### **Visual Representation (Simplified)**
+```
+[Application]      ← Your apps (Chrome, Email)
+[Presentation]     ← Converts / encrypts data
+[Session]          ← Keeps connection alive
+[Transport]        ← Ensures data is complete (TCP/UDP)
+[Network]          ← Routes data (IP addresses)
+[Data Link]        ← Frames data for local delivery (MAC)
+[Physical]         ← Wires, Wi-Fi, signals
+```
+---
+
+Nice — let’s walk through **how the OSI model explains exactly what happens** when you join a Microsoft Teams video call in your browser. I’ll map each OSI layer to the real pieces (browser, HTTPS, WebRTC, UDP/TCP, NAT, Wi-Fi/Ethernet) and show the exact flow of a single video frame from your camera to somebody else’s screen.
+
+# Big picture (one-sentence)
+
+OSI gives 7 conceptual layers; for a Teams-in-browser call the **app & signaling run over TCP/HTTPS**, the **real-time media (audio/video) runs over UDP (WebRTC → SRTP)** with fallbacks, and the network/hardware layers carry the bits physically. Now the detailed layer-by-layer map.
+
+---
+# Layer 7 — Application (What you use)
+* Where: **Teams web app in your browser** (teams.microsoft.com).
+* What it does: UI, chat, meeting controls, “Join” button.
+* Technologies: Browser APIs like `getUserMedia()` (access camera/mic), WebSocket or HTTPS for signaling, WebRTC PeerConnection API for real-time.
+* Example action: You click “Join meeting” → the Teams web app sends a request to the server (login, meeting metadata).
+---
+# Layer 6 — Presentation (Prepare the data)
+* Where: Codecs and encryption/formatting inside browser and WebRTC stack.
+* What it does: **Encode/compress** audio & video (e.g., Opus for audio, VP8/VP9 or H.264 for video), **encrypt** media streams (SRTP), maybe compress or serialize data.
+* Important: TLS (for HTTPS) and DTLS (for WebRTC key exchange) logically sit here — they make payloads unreadable to eavesdroppers.
+* Example: Camera frames are encoded to compressed video frames and encrypted before being handed to Transport.
+---
+# Layer 5 — Session (Start/maintain the conversation)
+* Where: Signaling layer and connection management (in app + server).
+* What it does: **Set up and tear down** the call, manage who is in the meeting, token/credential negotiation, reconnections.
+* Technologies: Signaling messages usually go over **HTTPS (TCP)** or WebSocket to Teams’ signaling servers; WebRTC’s PeerConnection uses this signaling channel to exchange connection info (ICE candidates, SDP).
+* Example: Browser tells Teams “I want to join meeting X”; server coordinates other participants and helps exchange the info needed to open the media path.
+---
+# Layer 4 — Transport (How data is delivered)
+* Where: TCP or UDP (the key decision point).
+* What it does: **Breaks data into segments, adds ports, handles reliability/ordering (if TCP)** or sends without guarantee (if UDP).
+* Real-world mapping:
+  * **Control/ signaling/ chat / files** → **TCP (HTTPS, port 443)** — reliable.
+  * **Real-time media (audio/video)** → **UDP** carrying RTP (but encrypted as SRTP). UDP is used because low latency matters more than every lost packet.
+  * **If UDP blocked** → WebRTC can fall back to **TCP (or TLS over TCP)** or use a TURN relay to move media through TCP on port 443.
+* Other pieces: **DTLS** (for encrypting media keys) runs over UDP initially for WebRTC; **RTCP** (control packets) travel with RTP for quality feedback.
+* Example: Encoded+encrypted video frames are packed into RTP packets, sent over UDP to a remote IP\:port.
+---
+# Layer 3 — Network (Addressing & routing)
+* Where: **IP layer** (IPv4/IPv6).
+* What it does: Adds source/destination IPs, routes packets across the internet via routers.
+* Real issues here: **NAT** (your home router hides private IPs) and firewalls — that’s why WebRTC uses **ICE/STUN/TURN**:
+  * **STUN** finds your public IP/port so peers can reach you (uses UDP usually).
+  * **TURN** relays media via a server if direct peer-to-peer is blocked (can use UDP or TCP).
+* Example: RTP packet gets an IP header with your router’s public IP (or TURN server IP) and is forwarded along the route to the recipient.
+---
+# Layer 2 — Data Link (Local delivery)
+* Where: Ethernet, Wi-Fi link between your device and the local router/switch/AP.
+* What it does: Wraps IP packet in a frame with **MAC addresses**, handles local error detection and switching. ARP resolves IP → MAC on local network.
+* Example: Your laptop sends Ethernet/Wi-Fi frames to the home router (or Wi-Fi AP) that contain the IP packets for the meeting.
+---
+# Layer 1 — Physical (The medium)
+
+* Where: The actual cable or radio waves.
+* What it does: Converts frame bits to electrical/optical/radio signals and transmits them.
+* Example: Wi-Fi radio waves or an Ethernet cable carry the 0s and 1s to your router.
+---
+
+# Encapsulation & decapsulation (what actually gets added at each step)
+
+When sending, each lower layer **wraps** data with its header:
+
+1. **App data** (video frame)
+2. **Presentation** — encoded + encrypted payload
+3. **Transport** — adds UDP or TCP header (source port, dest port, seq no. for TCP)
+4. **Network** — adds IP header (src/dst IP)
+5. **Data Link** — adds Ethernet/Wi-Fi header (src/dst MAC)
+6. **Physical** — bits on the wire
+
+Receiver does **decapsulation** in reverse: physical → data link → IP → transport → decode/decrypt → app.
+
+---
+
+# A concrete single-frame journey (very short)
+
+1. Camera frame captured (App).
+2. Browser encodes (codec) and encrypts (SRTP keys negotiated via DTLS).
+3. Frame split into RTP packets → put into UDP segments (Transport).
+4. UDP segments wrapped in IP packets (Network) — NAT may translate private→public IP/port.
+5. IP packets wrapped in Wi-Fi frames (Data Link).
+6. Sent as radio waves (Physical) → routers/switches forward → the remote client reverses the process and displays the frame.
+
+---
+
+# Why Teams uses both TCP and UDP
+
+* **TCP** for reliable operations (web page load, signaling, chat, file transfer).
+* **UDP** for low-latency media; occasional lost packets are preferable to delays from waiting for retransmits.
+* **Fallbacks**: If UDP or peer-to-peer is blocked, media can be relayed via TURN or sent over TCP (making call possible but maybe higher latency).
+
+---
+
+# Extra practical points that affect call quality
+
+* **Latency** (delay) — lower is better for conversations.
+* **Jitter** (variation in packet arrival) — handled by jitter buffers at receiver.
+* **Packet loss** — media can use loss concealment, forward error correction, or adaptive bitrate.
+* **QoS/DSCP** — networks can mark media packets (Layer 3) to prioritize them.
+* **NAT/firewalls** — often the biggest real-world problem; handled by ICE/STUN/TURN.
+
+---
+
+# Quick cheat-sheet summary
+
+* Layers 7–5: Browser app, encoding/crypto, session/signaling (HTTPS/WebSocket).
+* Layer 4: **TCP for control & reliability**, **UDP (RTP/SRTP) for real-time media**.
+* Layer 3: IP routing, NAT — ICE/STUN/TURN fix traversal.
+* Layer 2/1: Local LAN/Wi-Fi/Ethernet and physical medium.
+
+---
+
+# 🕒 Teams Video Call: Step-by-Step OSI & Protocol Flow
+
+| Step | What Happens                                    | OSI Layer                 | Protocol Used                           | Notes                                                                 |
+| ---- | ----------------------------------------------- | ------------------------- | --------------------------------------- | --------------------------------------------------------------------- |
+| 1    | Browser looks up `teams.microsoft.com`          | L7 App / L5 Session       | DNS (UDP, sometimes TCP)                | Finds the server IP                                                   |
+| 2    | Browser requests Teams web page                 | L7 App / L6 Presentation  | HTTPS (TCP 443)                         | Loads UI, controls, chat interface                                    |
+| 3    | Signaling to setup call (exchange session info) | L5 Session / L4 Transport | HTTPS / WebSocket (TCP)                 | Exchanges SDP, ICE candidates                                         |
+| 4    | Camera captures video & mic captures audio      | L7 App                    | —                                       | Raw media frames                                                      |
+| 5    | Video/audio encoded and encrypted               | L6 Presentation           | SRTP (Secure RTP)                       | Codec (VP8/VP9/H.264) and encryption                                  |
+| 6    | Media segmented into packets                    | L4 Transport              | UDP (RTP/SRTP)                          | Low-latency delivery; sequence numbers added                          |
+| 7    | Packets wrapped with IP headers                 | L3 Network                | IP (IPv4/IPv6)                          | Routes across the internet; NAT traversal via ICE/STUN/TURN if needed |
+| 8    | Packets framed for LAN/Wi-Fi                    | L2 Data Link              | Ethernet / Wi-Fi                        | MAC addresses added for local delivery                                |
+| 9    | Bits transmitted over cables or radio           | L1 Physical               | Electrical signals / Wi-Fi radio waves  | Physical transport                                                    |
+| 10   | Receiver reverses process                       | L1–L7                     | UDP/RTP → IP → decode/decrypt → display | Video frame appears on other participant’s screen                     |
+
+---
+
+### ⚡ Key Points
+
+* **Chat & file transfer**: Use **TCP** (reliable).
+* **Real-time video/audio**: Use **UDP** (fast, some packet loss okay).
+* **Signaling & control**: Use **TCP** (HTTPS/WebSocket).
+* **DNS lookup**: **UDP** (quick request), TCP only if response too large.
+* **Media fallback**: If UDP is blocked, WebRTC can use **TCP via TURN relay**.
+
+---
+
+### 🧠 Quick Analogy
+
+* **TCP** → Registered mail (guaranteed delivery)
+* **UDP** → Live phone/video call (fast, some lost frames are fine)
+* **OSI layers** → The “stages” each message passes through: app → encode/encrypt → transport → route → local delivery → physical signal
+
+--
+# **📊 TCP vs UDP: Protocol Map**
+
+```
+TCP (Reliable, Connection-Oriented)
+-----------------------------------
+| HTTP   (80)     → Web pages
+| HTTPS  (443)    → Secure web pages
+| FTP    (20/21)  → File Transfer
+| SMTP   (25)     → Sending email
+| IMAP   (143)    → Reading email
+| POP3   (110)    → Reading email
+| SSH    (22)     → Secure remote login
+| Telnet (23)     → Remote terminal access
+-----------------------------------
+
+UDP (Fast, Connectionless)
+--------------------------
+| DNS    (53)     → Domain name lookup
+| DHCP   (67/68)  → Assign IP addresses automatically
+| TFTP   (69)     → Simple file transfer
+| SNMP   (161)    → Network management
+| RIP    (520)    → Routing updates
+| NTP    (123)    → Time synchronization
+| VoIP / RTP / SIP → Voice/video streaming
+--------------------------
+```
+
+---
+# 🔹 Quick Comparison Table
+
+| Feature     | TCP                       | UDP                          |
+| ----------- | ------------------------- | ---------------------------- |
+| Connection  | ✅ Yes                     | ❌ No                         |
+| Reliability | ✅ Yes                     | ❌ No                         |
+| Order       | ✅ Maintains order         | ❌ Not guaranteed             |
+| Speed       | Slower                    | Faster                       |
+| Overhead    | Higher                    | Lower                        |
+| Use Cases   | Web, email, file transfer | Streaming, gaming, DNS, VoIP |
+
+---
+
+💡 **Tip to remember:**
+* TCP = **“Take Care Protocol”** → reliable, careful, slow
+* UDP = **“Unstoppable Delivery Protocol”** → fast, risky, no guarantees
+
+---
+
+Subnet Classes:-
+1–126 → Class A	-	/8
+128–191 → Class B	-	/16
+192–223 → Class C	-	/24
+
+* **IPv4 Address** → `192.168.0.103`
+* **Subnet Mask** → `255.255.255.0`
+* **Default Gateway** → `192.168.0.1`
+
+---
+
+## 1️⃣ Network ID (or Network Address)
+
+* The **network ID** identifies the whole network (not a single device).
+* Formula: **IP Address AND Subnet Mask**
+
+👉 Example:
+
+```
+   IP Address    : 192.168.0.103   → 11000000.10101000.00000000.01100111
+   Subnet Mask   : 255.255.255.0   → 11111111.11111111.11111111.00000000
+   ---------------------------------------------------------------
+   Network ID    : 192.168.0.0     → 11000000.10101000.00000000.00000000
+```
+
+✅ **Network ID = 192.168.0.0**
+
+---
+
+## 2️⃣ Host ID
+
+* The **host ID** is the part of the IP that identifies the device **inside the network**.
+* Formula: **IP Address – Network ID**
+
+👉 Example:
+
+```
+   IP Address : 192.168.0.103
+   Network ID : 192.168.0.0
+   ---------------------------------
+   Host ID    : .103
+```
+
+✅ **Host ID = 103** (your device is host number 103 in the network).
+
+---
+
+## 3️⃣ Broadcast ID (or Broadcast Address)
+
+* The **broadcast address** is used to send data to **all hosts in the network**.
+* Formula: **Network ID + All host bits set to 1**
+
+👉 Example:
+
+```
+   Network ID : 192.168.0.0
+   Subnet Mask: 255.255.255.0 → means last 8 bits are host bits
+   Broadcast  : 192.168.0.255
+```
+
+✅ **Broadcast ID = 192.168.0.255**
+
+---
+
+## 🎯 Final Answer for Your Network
+
+* **Network ID** → `192.168.0.0`
+* **Host ID** → `103` (your PC’s identity in the LAN)
+* **Broadcast ID** → `192.168.0.255`
+
+---
+
+💡 Quick Tip: With subnet mask `255.255.255.0`,
+
+* Network has **256 total IPs** (`192.168.0.0 – 192.168.0.255`)
+* Usable IPs = **254 hosts** (`192.168.0.1 – 192.168.0.254`)
+* `192.168.0.0` = network address, `192.168.0.255` = broadcast.
+
+---
+
+👉 Do you want me to also explain **how this changes if the subnet mask isn’t 255.255.255.0** (like `/16` or `/28` networks)? That’s where subnetting math really comes in.
+Got it 👍 — you’re pointing at this line:
+
+```
+Default Gateway . . . . . . . . . : 192.168.0.1
+```
+
+Let’s unpack **what it is** and **what it’s used for**.
+
+---
+
+## 🌐 What is the Default Gateway?
+
+* The **default gateway** is the **router’s IP address inside your LAN** (your local network).
+* In your case → `192.168.0.1` is your **Tenda Wi-Fi router’s local address**.
+* Every device in your network (like your PC at `192.168.0.103`) sends traffic **outside the LAN** to this address first.
+
+---
+
+## 🛠️ Usage of the Default Gateway
+
+1. **Exit Point for the LAN**
+
+   * If your PC wants to reach another LAN device (e.g., `192.168.0.105`), it goes **directly**.
+   * If it wants to reach the internet (e.g., `142.250.190.14` = Google), it checks the subnet:
+
+     * Not local? → forward to **192.168.0.1** (gateway).
+
+2. **Routing Traffic**
+
+   * The gateway **forwards packets** from your LAN to the **WAN (ISP side)**.
+   * It performs **NAT (Network Address Translation)**, converting your private IP (`192.168.0.103`) into the WAN IP (`192.168.1.33` or a public IP).
+
+3. **Services**
+
+   * The gateway often runs:
+
+     * **DHCP** → Assigns IPs to devices automatically.
+     * **DNS forwarding** → Forwards name lookups to your ISP or public DNS.
+     * **Firewall** → Protects your LAN from unwanted outside traffic.
+
+4. **Admin Access**
+
+   * You can type `http://192.168.0.1` in your browser → login page of your router.
+   * From there, you can configure Wi-Fi, DHCP, port forwarding, firewall rules, etc.
+
+---
+
+## ✅ In Short
+
+* **192.168.0.1 = your router’s “door”** to the outside world.
+* Your PC sends all “non-local” traffic to it.
+* Without a default gateway, you’d only be able to talk to devices inside your LAN — no internet.
+
+---
+
+
+Subnetting methods:
+
+Binary number system
+IPv4 address structure (32 bits, 4 octets)
+IP classes (A, B, C, D, E)
+Default subnet masks
+CIDR notation (/n)
+Subnet masks in binary & decimal
+Bitwise AND (IP & Mask → Network ID)
+Network ID vs Host ID vs Broadcast ID
+Borrowed bits & number of subnets
+Host bits & usable hosts formula (2^n − 2)
+Block size calculation (256 − mask value)
+Subnetting a network into smaller subnets
+Supernetting (aggregating subnets)
+Usable IP range per subnet
+
+
+---
+
+### **1. Binary Number System**
+
+* Computers only understand **0s and 1s** (binary).
+* Example:
+
+  * Decimal (normal numbers): `10`
+  * Binary: `1010` (means 8 + 2 = 10).
+* Every digit (bit) in binary represents a power of 2.
+
+---
+
+### **2. IPv4 Address Structure (32 bits, 4 octets)**
+
+* An **IPv4 address** is just a 32-bit number written in 4 parts (octets).
+* Each octet = 8 bits (0–255).
+* Example: `192.168.1.10` → in binary:
+  `11000000.10101000.00000001.00001010`
+
+---
+
+### **3. IP Classes (A, B, C, D, E)**
+
+IP addresses were divided into "classes" for different sized networks:
+
+* **Class A**: `1–126.x.x.x` → Huge networks
+* **Class B**: `128–191.x.x` → Medium networks
+* **Class C**: `192–223.x.x.x` → Small networks
+* **Class D**: `224–239.x.x.x` → Multicast (special use)
+* **Class E**: `240–255.x.x.x` → Experimental
+
+*(127.x.x.x is reserved for loopback, like 127.0.0.1)*
+
+---
+
+### **4. Default Subnet Masks**
+
+Each class had a **default mask** (how many bits for "network" vs "host"):
+
+* Class A → `255.0.0.0` → `/8`
+* Class B → `255.255.0.0` → `/16`
+* Class C → `255.255.255.0` → `/24`
+
+---
+
+### **5. CIDR Notation (/n)**
+
+* Instead of classes, we now use **CIDR** (`/n`).
+* `/n` means **n bits are for the network**.
+* Example: `192.168.1.0/24` → first 24 bits = network, last 8 bits = hosts.
+⦁	It simply tells you how many bits of the 32-bit IP address are used for the network part.
+
+Example:-  192.168.1.10/24
+
+The /24 means → first 24 bits = network, last 8 bits = hosts.
+Since IPv4 addresses are 32 bits:
+
+/24 → 24 bits for network, 8 bits left for host addresses
+/16 → 16 bits for network, 16 bits left for host addresses
+/8 → 8 bits for network, 24 bits left for host addresses
+
+---
+
+### **6. Subnet Masks in Binary & Decimal**
+
+* Example: `/24` → `255.255.255.0`
+* In binary: `11111111.11111111.11111111.00000000`
+  (1s = network, 0s = host).
+
+---
+
+### **7. Bitwise AND (IP & Mask → Network ID)**
+
+* To find the **network ID**, do IP **AND** Mask:
+* Example:
+
+  * IP: `192.168.1.10`
+  * Mask: `255.255.255.0`
+  * Result: `192.168.1.0` (Network ID).
+
+---
+
+### **8. Network ID vs Host ID vs Broadcast ID**
+
+* **Network ID**: first address in subnet (identifies the subnet).
+* **Host IDs**: usable addresses for devices (between network and broadcast).
+* **Broadcast ID**: last address in subnet (used to talk to *all* hosts).
+
+Example `/24` → `192.168.1.0` to `192.168.1.255`
+
+* Network ID = `192.168.1.0`
+* Usable hosts = `192.168.1.1 – 192.168.1.254`
+* Broadcast = `192.168.1.255`
+
+---
+
+### **9. Borrowed Bits & Number of Subnets**
+
+* If you “borrow” host bits (turn them into network bits), you create **more subnets**.
+* Formula: `2^n` (where n = borrowed bits).
+* Example: `/24` → borrow 2 bits → `/26` → `2^2 = 4 subnets`.
+
+---
+
+### **10. Host Bits & Usable Hosts Formula**
+
+* Formula: `2^n − 2` (n = host bits).
+* Subtract 2 for **network ID** & **broadcast**.
+* Example: `/24` → 8 host bits → `2^8 − 2 = 254 hosts`.
+
+---
+
+### **11. Block Size Calculation (256 − mask value)**
+
+* Block size = step of subnets.
+* Example: `/26` → mask = `255.255.255.192` → last octet = 192.
+* Block size = `256 − 192 = 64`.
+* Subnets: `0–63, 64–127, 128–191, 192–255`.
+
+---
+
+### **12. Subnetting a Network into Smaller Subnets**
+
+* Take a big network and cut it into smaller ones.
+* Example: `192.168.1.0/24` split into `/26`:
+
+  * `192.168.1.0 – 63`
+  * `192.168.1.64 – 127`
+  * `192.168.1.128 – 191`
+  * `192.168.1.192 – 255`.
+
+---
+
+### **13. Supernetting (Aggregating Subnets)**
+
+* The opposite of subnetting.
+* Combine smaller networks into a bigger one.
+* Example: Four `/26` can be combined into one `/24`.
+
+---
+
+### **14. Usable IP Range per Subnet**
+
+* Formula:
+
+  * First usable = **Network ID + 1**
+  * Last usable = **Broadcast − 1**
+* Example `/26` (192.168.1.0–63):
+
+  * Network ID = `192.168.1.0`
+  * Broadcast = `192.168.1.63`
+  * Usable = `192.168.1.1 – 192.168.1.62`.
+
+---
+
+

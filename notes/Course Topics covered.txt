@@ -1,0 +1,44 @@
+Notes - AWS
+ 
+North virigina (region) - started AWS
+ - HQ of AWS
+ - has 6 Available zone becoz of all data
+
+
+region based - only like mumbai
+global based - store in north virigina and available to every other regions.
+
+
+
+Topics Covered till date –
+
+1. Basics of Computer
+2. Components of computer
+3. What is server?
+4. Difference b/w server and computer.
+5. What is Data Center?
+6. Problems/limitations we face with Data Center.
+7. What is Cloud?
+8. What is Cloud Computing?
+9. What is Virtualization and how virtualization works.?
+10. Characteristics of Cloud Computing
+11. Advantages of Cloud Computing
+12. What is Resource Pooling, Multi-Tenancy?
+13. Difference between Elasticity and Scalability.
+14. AWS Global Infrastructure - Regions, AZ and Data Centers.
+15. IAM - Identity & Access Management
+
+16. SERVICES-1 - EC2 – Basics – Windows, Ubuntu, Linux Servers
+17. Linux – Basics to Advance
+18. EC2 – Complete(AMI, Snapshot)
+19. Load Balancer & Target Group, Launch Template and Auto Scaling Group
+20. EBS(Volume)
+
+21. SERVICES-2 - S3 – Complete
+22. Cloud Front - Complete
+
+
+
+
+
+

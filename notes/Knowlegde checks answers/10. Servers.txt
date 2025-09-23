@@ -1,0 +1,27 @@
+Servers
+KC - Servers
+1. Which resource is a template that Amazon EC2 uses to launch an instance?
+ Amazon Elastic Block Store (Amazon EBS) volume
+ Amazon Machine Image (AMI) ✅
+ Snapshot
+ Instance profile
+2. Which resource acts as a firewall at the instance level?
+ Network access control list (network ACL)
+ Security group ✅
+ Internet gateway
+ Router
+3. Which type of IP address is considered to be static and can be reassigned to different instances?
+ Elastic IP address ✅
+ Public IP address
+ Network broadcast IP address
+ Private IP address
+4. What is an instance profile used for?
+ To store permanent access keys on an Amazon EC2 instance
+ To assign an AWS Identity and Access Management (IAM) role to an Amazon EC2 instance ✅
+ To automatically run a script when an Amazon EC2 instance is launched
+ To specify the security settings of an Amazon RDS instance
+5. Which Amazon EC2 instance type is designed for diverse workloads?
+ Memory optimized
+ General purpose ✅
+ Storage optimized
+ Compute optimized
