@@ -1,0 +1,135 @@
+1439  ls
+ 1440  echo "current path is ["$(pwd)"]"
+ 1441  echo "current path is ["$(pwd)"]" > path.txt
+ 1442  cat path.txt
+ 1443  cd ~/documents/
+ 1444  cd ..
+ 1445  cd ~/hook/
+ 1446  echo "Hello"; echo "World"
+ 1447  ps
+ 1448  man ps
+ 1449  ps -ef
+ 1450  ps -ef | grep sshd
+ 1451  echo "hi" > demo.txt
+ 1452  top
+ 1453  ifconfig
+ 1454  ip
+ 1455  cd ..
+ 1456  ls
+ 1457  cat bca.txt
+ 1458  cat sample.txt
+ 1459  cat sort.txt~
+ 1460  grep -i "a"  sort.txt~
+ 1461  grep -i "b"  sort.txt~
+ 1462  ls
+ 1463  vi rj.txt
+ 1464  grep -i "Linux"  rj.txt
+ 1465  grep -i "OS"  rj.txt
+ 1466  grep "Linux"  rj.txt
+ 1467  man -i
+ 1468  man grep
+ 1469  ls
+ 1470  rm sort.txt
+ 1471  rm sort.txt~
+ 1472  rm sorted.txt
+ 1473  ls
+ 1474  vi sort.txt
+ 1475  cat sort.txt
+ 1476  sort sort.txt
+ 1477  sort -r sort.txt
+ 1478  cat sort.txt
+ 1479  vi sort.txt
+ 1480  cat sort.txt
+ 1481  sort sort.txt
+ 1482  sort sort.txt >> sorted.txt
+ 1483  cat sorted.txt
+ 1484  sort -r sort.txt >> sorted.txt
+ 1485  cat sorted.txt
+ 1486  sort -r sort.txt >> sort.txt
+ 1487  cat sort.txt
+ 1488  less < sort.txt
+ 1489  less sort.txt
+ 1490  cat < sort.xt
+ 1491  cat < sort.txt
+ 1492  ls
+ 1493  hash
+ 1494  ls
+ 1495  cksum morning.txt
+ 1496  cksum sort.txt
+ 1497  cp sort.txt hook
+ 1498  ls hook
+ 1499  cd hook
+ 1500  cksum sort.txt
+ 1501  echo "Butterfly" >> sort.txt
+ 1502  cksum sort.txt
+ 1503  vi sort.txt
+ 1504  cksum sort.txt
+ 1505  vi sort.txt
+ 1506  cksum sort.txt
+ 1507  top
+ 1508  kill 102
+ 1509  free
+ 1510  ls
+ 1511  wget https://sample-files.com/downloads/documents/txt/multilang.txt
+ 1512  ls
+ 1513  cat multilang.txt
+ 1514  curl https://sample-files.com/downloads/documents/txt/simple.txt
+ 1515  ls
+ 1516  wget https://sample-files.com/downloads/documents/txt/simple.txt
+ 1517  ls
+1518  cat multilang.txt
+ 1519  curl https://sample-files.com/downloads/documents/txt/simple.txt
+ 1520  ls
+ 1521  wget https://sample-files.com/downloads/documents/txt/simple.txt
+ 1522  ls
+ 1523  history
+ 1524  cd /etc
+ 1525  ls
+ 1526  less passwd
+ 1527  useradd rishabh
+ 1528  sudo useradd rishabh
+ 1529  less passwd
+ 1530  cat passwd
+ 1531  useradd -d /demo/xyz shahrukh
+ 1532  sudo useradd -d /demo/xyz shahrukh
+ 1533  cat passwd
+ 1534  sudo usermod -c "Superstar" shahrukh
+ 1535  cat passwd
+ 1536  less passwd
+ 1537  useradd Rajanikanth
+ 1538  sudo useradd Rajanikanth
+ 1539  less passwd
+ 1540  usermod -c "Superstar" Rajanikanth
+ 1541  sudo usermod -c "Superstar" Rajanikanth
+ 1542  less passwd
+ 1543  sudo usermod -e "2025-08-08" Rajanikanth
+ 1544  less passwd
+ 1545  sudo useradd -d /demo/abc Prabhas
+ 1546  less passwd
+ 1547  sudo userdel Prabhas
+ 1548  less passwd
+ 1549  cd /demo
+ 1550  cd /
+ 1551  ls
+ 1552  cd home
+ 1553  ls
+ 1554  cd /etc
+ 1555  sudo userdel -r Prabhas
+ 1556  less passwd
+ 1557  sudo userdel -r dhoni
+ 1558  ls /home
+ 1559  sudo userdel -r Raj
+ 1560  sudo userdel -r raj
+ 1561  ls /home
+ 1562  sudo userdel vicky
+ 1563  ls /home
+ 1564  sudo userdel -r vicky
+ 1565  ls /home
+ 1566  less passwd
+ 1567  passwd Rajanikanth
+ 1568  sudo passwd Rajanikanth
+ 1569  sudo su Rajanikanth
+ 1570  cd ~
+ 1571  su Rajanikanth
+ 1572  su Rajanikanth
+

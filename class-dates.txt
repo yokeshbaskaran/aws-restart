@@ -1,33 +1,33 @@
-AWS Class dates 
+AWS Class dates   ✅ 
 
-WEEK - 1
-day 1 - 23.07.2025 (Wednesday) = start date  - AWS course details
-day 2 - 24.07.25 - computer/server/cloud
-day 3 - 25.07.25 (F) - cloud computing/virtualization
+WEEK - 1 ✅
+day 1 - 23.07.2025 		(Wednesday) = start date  - AWS course details
+day 2 - 24.07.25		computer/server/cloud
+day 3 - 25.07.25 (F) 		cloud computing/virtualization
 
-WEEK - 2
-day 4 - 28.7.25 (M) - Data centers
-day 5 - 29.7.25 - global infrasturcture (AZ)
+WEEK - 2 ✅
+day 4 - 28.7.25 (M) 		Data centers
+day 5 - 29.7.25 			global infrasturcture (AZ)
 day 6 - 30.7.25 
-day 7 - 31.7.25 - IAM
-day 8 - 01.8.25  (F)  - ABSENT (afternoon only)  - EC2(Elastic Compute Cloud)
+day 7 - 31.7.25			IAM
+day 8 - 01.8.25  (F) - 		ABSENT (afternoon only)  - EC2(Elastic Compute Cloud)
 
 WEEK - 3
 day 09 - 4.8.25 (M)
-day 10 - 5.8.25 - linux
+day 10 - 5.8.25 - 		linux
 day 11 - 6.8.25 
-day 12 - 7.8.25 - RecordedClass
-day 13 - 8.8.25  (F) - linux cmds & file permisions
+day 12 - 7.8.25 - 		RecordedClass
+day 13 - 8.8.25  (F) - 		linux cmds & file permisions
 
 WEEK - 4
-day 14 - 11.8.25  (M) - elastic ip & AMI - TASK explained Linux/Ubuntu Demo
+day 14 - 11.8.25  (M) 	elastic ip & AMI - TASK explained Linux/Ubuntu Demo
 day 15 - 12.8.25 
-day 16 - 13.8.25  - ami, snapshot, task given
-day 17 - 14.8.25  - no class only attendance.
-day 18 - 15.8.25 (F) - HOLIDAY
+day 16 - 13.8.25 		ami, snapshot, task given
+day 17 - 14.8.25  		no class only attendance.
+day 18 - 15.8.25 (F) 		HOLIDAY
 
 WEEK - 5
-day 19 - 18.8.25 (M) - 2nd task
+day 19 - 18.8.25 (M) 		 2nd task
 day 20 - 19.8.25
 day 21 - 20.8.25
 day 22 - 21.8.25
@@ -36,16 +36,16 @@ day 23 - 22.8.25 (F)
 WEEK - 6
 day24 - 25.8.25 (M)
 day25 - 26.8.25
-day26 - 27.8.25 (Wed) - HOLIDAY
+day26 - 27.8.25 (Wed) 	HOLIDAY
 day27 - 28.8.25
-day28 - 29.8.25 (F)  -  Virtualization Explained:  https://www.youtube.com/watch?v=UBVVq-xz5i0
+day28 - 29.8.25 (F)		Virtualization Explained:  https://www.youtube.com/watch?v=UBVVq-xz5i0
 
 WEEK - 7
 day29 - 1.9.25 (M)
 day30 - 2.9.25
 day31 - 3.9.25  
 day32 - 4.9.25
-day33 - 5.9.25 (F)  - Onam Holiday
+day33 - 5.9.25 (F) 		Onam Holiday
 
 WEEK - 8
 day34 - 8.9.25 (M)
@@ -62,9 +62,10 @@ day42 - 18.9.25
 day43 - 19.9.25 (F)  
 
 WEEK - 10
-day44 - 22.9.25 (M)   -  what is cloudwatch and cloudtrail with real time example in aws?
-day45 - 23.9.25  
+day44 - 22.9.25 (M) 		what is cloudwatch and cloudtrail with real time example in aws?
+day45 - 23.9.25  		Lambda (functions -serverless)
 day46 - 24.9.25  
+
 day47 - 25.9.25  
 day48 - 26.9.25 (F)   
 
