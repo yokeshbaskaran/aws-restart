@@ -12,7 +12,7 @@ day 6 - 30.7.25
 day 7 - 31.7.25			IAM
 day 8 - 01.8.25  (F) - 		ABSENT (afternoon only)  - EC2(Elastic Compute Cloud)
 
-WEEK - 3
+WEEK - 3  ✅
 day 09 - 4.8.25 (M)
 day 10 - 5.8.25 - 		linux
 day 11 - 6.8.25 
@@ -64,9 +64,9 @@ day43 - 19.9.25 (F)
 WEEK - 10
 day44 - 22.9.25 (M) 		what is cloudwatch and cloudtrail with real time example in aws?
 day45 - 23.9.25  		Lambda (functions -serverless)
-day46 - 24.9.25  
-
+day46 - 24.9.25  		Lamds - SNS (micro-services)
 day47 - 25.9.25  
+
 day48 - 26.9.25 (F)   
 
 
