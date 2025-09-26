@@ -19,7 +19,7 @@ day 11 - 6.8.25
 day 12 - 7.8.25 - 		RecordedClass
 day 13 - 8.8.25  (F) - 		linux cmds & file permisions
 
-WEEK - 4
+WEEK - 4 ✅
 day 14 - 11.8.25  (M) 	elastic ip & AMI - TASK explained Linux/Ubuntu Demo
 day 15 - 12.8.25 
 day 16 - 13.8.25 		ami, snapshot, task given
@@ -66,7 +66,6 @@ day44 - 22.9.25 (M) 		what is cloudwatch and cloudtrail with real time example i
 day45 - 23.9.25  		Lambda (functions -serverless)
 day46 - 24.9.25  		Lamds - SNS (micro-services)
 day47 - 25.9.25  
-
 day48 - 26.9.25 (F)   
 
 

@@ -1,5 +1,5 @@
 AWS Topics & Concepts:
-
+--------------------------------------------------------------------------------------------------------------------
 EC2 - ELASTIC COMPUTE CLOUD
 1. Elastic IP: 
 	- Normally an instance has Dynamic IP which changes when restarted instance.
@@ -18,6 +18,7 @@ Delete Way (2):
 1. Disassociate Elastic IP address from InstanceID
 2. Release Elastic IP address
 
+--------------------------------------
 2. Snapshots:- 
 	- it is used for creating AMI from another instance (like a blueprint)
 	- used to create volume for another instance (like extra storage (SSD))
@@ -26,14 +27,15 @@ Delete Way (2):
 -------------------
 1. Delete (Deregister) AMI ->  2. Delete associated snapshots [or] 2. Delete Snapshots
 
-
+--------------------------------------
 3. Amazon Machine Image (AMI):
 AMI is like a copy of another instance settings and configuration, we can use in another instance without entering those setting manually.
 
 Delete Way (1):
 -------------------
-1. Delete (Deregister) AMI ->  Delete associated snapshots
+1. Delete (Deregister) AMI ->  Delete associated snapshots.
 
+--------------------------------------
 4. Attach a volume:
 	- Like extra storage (SSD) for instance.
 Steps: 
@@ -45,21 +47,30 @@ Delete Way (2):
 -------------------
 1. De-attach volume. 2. Delete Volume
 
+--------------------------------------
 5. EC2 Image Builder
 	- Amazon EC2 Image Builder is a managed service that helps you automate the creation, customization, and distribution of machine images (like AMIs for EC2 or container images).
 	- Automates creating and updating images (AMIs/containers).
 
+--------------------------------------
 6. Recycle Bin for Snapshots: 
 	- Recycle Bin is an AWS feature that lets you recover accidentally deleted snapshots or EBS-backed AMIs within a defined retention period.
 	- Lets you recover deleted snapshots/AMIs within a retention period.
 
+--------------------------------------
 7. Load Balancer:
 	- Balance the loads in ec2 instance
+
+--------------------------------------
 8. Launch Template:
+
+--------------------------------------
 9. Target Groups
+
+--------------------------------------
 10. ASG:
 
-
+--------------------------------------------------------------------------------------------------------------------
 VPC concepts:- 
 1. VPC - (VIRTUAL PRIVATE CLOUD):
 	-It is a Private Virtual Network in a cloud.
@@ -71,6 +82,7 @@ Delete Way (1):
 -------------------
 	1. Delete VPC -> "delete" button
 
+--------------------------------------
 2. Internet gateway: 
 	- act a wire to give internet
 Steps: 
@@ -81,6 +93,7 @@ Delete Way (1):
 -------------------
 	1. Detach from VPC -> "detach" button
 
+--------------------------------------
 3. NAT Gateway:
 	- for access temporary internet inside a private subnet inside a VPC.
 Steps:  
@@ -94,28 +107,26 @@ Delete way (2):
 	1. NAT Gateway
 	2. Elastic IP (Release Elastic IP)
 
+--------------------------------------
 4. Public Subnet to Private Subnet Connection inside a VPC.
 Steps:  
 --------
-	1. Ensure the Public subnet has IGW 
-	2.  
-	3.  
-	4.  
-Public Subnet - Route Table(RT) :
+i)  Ensure the Public subnet has IGW and Private Subnet has NAT GW(using Elastic-IP) to connect with each other.
+ii)  Also modify the Route tables and Subnet associations for both Subnets.
+
+1.1 - Public Subnet - Route Table(RT) :
 ----------------------------------------------------
 Destination 		Target
 ----------------------------------------------------
 150.120.0.0/18		local
 0.0.0.0 / 0			igw-0dfd0000000	(IGW)
 ----------------------------------------------------
-
-Public Subnet = Subnet associations: 
+1.2 - Public Subnet = Subnet associations: 
 Name 	Subnet ID				IPv4 CIDR
 ---------------------------------------------------------------
 public	subnet-0abcd51			150.120.0.0/27
 
------------------------------------------------------------------------
-Private Subnet - (RT) :
+2.1 - Private Subnet - (RT) :
 ----------------------------------------------------
 Destination 		Target
 ----------------------------------------------------
@@ -123,11 +134,12 @@ Destination 		Target
 0.0.0.0 / 0			nat-0dfd0000000	(NAT GW)
 ----------------------------------------------------
 
-Private Subnet = Subnet associations: 
+2.2 - Private Subnet = Subnet associations: 
 Name 	Subnet ID				IPv4 CIDR
 ---------------------------------------------------------------
 private	subnet-0ba66cab		150.120.100.0/28
 
+--------------------------------------
 5. Peering Connection:
 	- VPC peering connection is a networking connection between two VPCs that enables you to route traffic between them privately.
 
@@ -189,18 +201,201 @@ VPC 1: 150.60.0.0/25
 VPC 2: 170.10.0.0/25
 ✅ NO overlap
 ---
-
 Delete way (2): 
 -------------------
 	1. Delete peering connection --> Delete related Route table entries.
 	2. Delete VPCs --> --> Subnets--> Route tables
 
+--------------------------------------------------------------------------------------------------------------------
+CLOUDFRONT - CDN(CONTENT DELIVERY NETWORK):
+1. Create CloudFront Distributions:
 
+Steps:
+-------
+	1. Host a Static Website in S3 to create CDN Distributions
+	2. Name - DemoCDN
+	3. Specify Origin :
+OriginType: 		Amazon S3.
+Origin -> s3 origin : 	23-09-today-yoki
+	 => S3 bucket has static web hosting enabled -> click "Use Website Endpoint".
+bucket-yoki.s3.ap-south-1.amazonaws.com **changes to** bucket-yoki.s3-website.ap-south-1.amazonaws.com
+	newSetting -> Allow private S3 bucket access to CloudFront ✅ 
+	3. Disable -> Web Application Firewall (WAF) - ⚠️ Do not enable security protections
+	4. Review and create -> Click "create  distribution" button
+	5. Take more than 3 minutes to create. Check "Last modified: Sep 23, 2025 at 4:04:33 PM"
+Example:
+Domain name =  d3rd0imy45qlo2.cloudfront.net  =Cloudfront (CDN)
+CDN Link:    https://d3rd0imy45qlo2.cloudfront.net 
+1st  time 	-   x-cache  -  Miss from cloudfront
+2nd time	-   x-cache  -   Hit from cloudfront
 
+Delete way (2): 
+--------------------
+1. Disable distribution - button
+2. Delete distribution 	 - EX6MDHVJU2D6S
+
+2. CloudFront Distributions Inside Options:
+----------------------------------------------------
+i) Security 	->  CloudFront geographic restrictions 	  -	Allow / Block Countries
+ii) General - Edit Settings -> 
+Price class: Choose the price class associated with the maximum price that you want to pay.
+Choose one option below:
+	- Use all edge locations (best performance)
+	- Use only North America and Europe
+	- Use North America, Europe, Asia, Middle East, and Africa
+iii) Behaviours ->   edit"cache TTL" and edit TTL Settings here.
+iv) Invalidation ->  create Invalidation => object path:   "/*"	 - checks the change from origin and make new changes.
+
+--------------------------------------------------------------------------------------------------------------------
 S3 - SIMPLE STORAGE SERVICE
-1. Bucket
-2. Object types and Permissions
+Go to S3 Service:
+1. Bucket:
+	- it is the fundamental container where your data is stored. You can think of it like a top-level folder in the cloud.
+Steps:
+--------
+	1. Aws Region: Asia Pacific (Mumbai = ap-south-1) = Default
+	2. Bucket type:		General Purpose
+	3. Bucket name:	 	24-09-yoki-aws  (unique)
+Delete way:
+--------------
+1. Empty the Objects first
+2. then "Delete bucket"
 
+--------------------------------------
+2. S3 Bucket Inside Options:
+--------------------------------
+i)  Presigned URL: 
+	- We can share object using presigned URL for temporary time (based on minutes, hours) 
+Steps:-  Select the Object -> Actions -> Share with presigned URL.
+
+-------
+ii) Bucket Policy:
+	- It is a resource-based policy (JSON) attached to an S3 bucket.
+	- It controls who (IAM users, roles, accounts, or public) can access the bucket and what actions they can perform (e.g., s3:GetObject, s3:PutObject).
+
+Steps:-  Select Permissions  -> Edit Bucket policy.
+-------
+eg:- ➡️ Anyone can read (GET) objects inside my-bucket-name.
+{
+  "Version": "2012-10-17",        		 	// Policy language version (always use this latest one).
+  "Statement": [                  			// A list of rules (statements) inside the policy.
+    {
+      "Sid": "PublicReadGetObject", 		// A label/name for this rule (for your reference).
+      "Effect": "Allow",            			// Whether to ALLOW or DENY the action.
+      "Principal": "*",             			// Who can access ( * = everyone/public ).
+      "Action": [						// What action is allowed (here = read/download/upload files).
+	"s3:GetObject", 
+	"s3.PutObject"
+	],    			
+      "Resource": "arn:aws:s3:::my-bucket-name/*" // Which bucket/objects the rule applies to.
+    }
+  ]
+}.
+
+-------
+iii) Bucket Versioning:
+	- Versioning is a feature in Amazon S3 that keeps multiple versions of the same object (file) in a bucket.
+	- Instead of overwriting or deleting a file permanently, S3 stores old versions so you can restore or retrieve them later.
+-When it is ON, if by mistake or accidently deleted a object, it marks TYPE as "Delete Marker"
+
+Steps:-  Select Properties  -> Edit Bucket Versioning -> Select "Enabled"  (or) "Suspend" Button.
+
+-------
+iv) Static website hosting:
+	- Use this bucket to host a website or redirect requests.
+	- host only one website per bucket.
+
+Steps:-  Select Properties  -> Edit Static website hosting -> Select "Enable" (or) "Disable" Button
+if  "Enabled":  Hosting Type ->  Static Website (or) Redirects request  -> Index Document -> index.html (object).
+
+⚠️DO NOT USE - Amplify Hosting -> General Settings -> Delelte APP.
+eg:- Hosted website link:-   bucket-yoki.s3-website.ap-south-1.amazonaws.com.
+
+-------
+v) Default Encryption:
+1. SSE-S3 
+2. SSE-KMS
+3. SSE-S3 + SSE-KMS = DSSE-KMS
+
+---------
+vi) Object Lock:
+- prevents objects in an S3 bucket from being deleted or overwritten for a defined period of time.
+- works only when "Bucket Versioning" is ENABLED.
+Steps:-  Select Properties  -> Edit Object Lock -> Select "Enable" (or) "Disable" Button
+
+---------
+vii) Requester Pays:
+- It makes the person downloading or accessing objects pay the data transfer and request costs instead of the bucket owner.
+Steps:-  Select Properties  -> Edit Requester Pays -> Select "Enable" (or) "Disable" Button
+If "ENABLED" -> it removes the anonymous access(❌no more free access) and GET request user get 💸charged for data from bucket.
+
+---------
+viii) Replication rules:
+- S3 replication lets you automatically copy objects from one S3 bucket (source) to another (destination).
+- Source & destination buckets must have versioning enabled.
+- it only works for new objects after rule creation (not retroactive unless you use S3 Batch Replication).
+Steps:-  Select Properties  -> Edit Object Lock -> Select "Enable" (or) "Disable" Button
+	1. Replication rule name:  replicate-data
+	2. Status:	Enabled (or) Disabled
+	3. Source bucket 
+		Source bucket name 	- 25-09-yoki-aws
+		Source Region		- Asia Pacific (Mumbai) ap-south-1
+	4. Destination
+		Destination - 
+			1. Choose the bucket that will receive replicated objects.
+					(or)
+			2. Specify a bucket in another account
+		=>after selected, Destination Region: Asia Pacific (Mumbai) ap-south-1
+	5. IAM role - permissions provide to services => click "create new ROLE" button
+	6. Encryption - Server-side encryption protects data at rest. = Click (or) unclick
+	7. Leave Default and Select "Yes, Replicate Objects" in popup after creating.
+	8. ⚠️ DO NOT CREATE batch operations after creating replication. (Money charged💸)
+Other replication options:
+- Replicate storage class?
+- Replicate delete markers?
+- Replicate encrypted objects?
+
+---------
+viii) S3 Storage class:
+	- provides different storage classes to balance cost, performance, and availability based on your use case.
+Steps:-  Objects -> Actions -> Edit Storage Class	-> choose one Storage class (need basis)
+
+---------
+viii) Lifecycle rule:
+- policy you can configure on an S3 bucket (or prefix/object tag filters) to automatically manage objects over time.
+Steps:-  Management tab → Lifecycle rules → Create Lifecycle rules.
+-------
+Main actions in an S3 Lifecycle Rule:
+1.Transition actions – Move objects to a different storage class (e.g. S3 Standard → S3 Standard-IA → S3 Glacier → S3 Glacier Deep Archive).
+2.Expiration actions – Permanently delete objects after a specified time.
+3.Abort incomplete multipart uploads – Automatically remove unfinished uploads to save storage.
+4.Clean up expired object delete markers – Remove unnecessary delete markers in versioned buckets.
+
+---------
+
+
+ 
+SAMPLE:-----
+
+Topic:
+	- detail
+Steps:
+--------
+	1. steps detail
+	2. steps detail
+	3.  steps detail
+
+Delete way:
+--------------
+1. Delete
+2. Delete
+
+
+i) Topic:
+	- details
+	- description
+Steps:-  path1  -> path2 -> path3
+---------
 
 
 

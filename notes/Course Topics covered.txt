@@ -9,7 +9,6 @@ region based - only like mumbai
 global based - store in north virigina and available to every other regions.
 
 
-
 Topics Covered till date –
 
 1. Basics of Computer

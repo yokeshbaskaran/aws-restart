@@ -1,6 +1,5 @@
-
-Hi
-my name is Yokesh. I am from batch is SA_RI_AB.
+Hi.
+My name is Yokesh. I am from batch is SA_RI_AB.
 my mentor is Rishabh joshi.
 
 This aws course is very helpful and useful for learning AWS fundamentals and its basic concepts. 
