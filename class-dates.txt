@@ -14,10 +14,10 @@ day 8 - 01.8.25  (F) - 		ABSENT (afternoon only)  - EC2(Elastic Compute Cloud)
 
 WEEK - 3  ✅
 day 09 - 4.8.25 (M)
-day 10 - 5.8.25 - 		linux
+day 10 - 5.8.25  		linux
 day 11 - 6.8.25 
-day 12 - 7.8.25 - 		RecordedClass
-day 13 - 8.8.25  (F) - 		linux cmds & file permisions
+day 12 - 7.8.25  		RecordedClass
+day 13 - 8.8.25  (F) 		linux cmds & file permisions
 
 WEEK - 4 ✅
 day 14 - 11.8.25  (M) 	elastic ip & AMI - TASK explained Linux/Ubuntu Demo
@@ -30,11 +30,11 @@ WEEK - 5
 day 19 - 18.8.25 (M) 		 2nd task
 day 20 - 19.8.25
 day 21 - 20.8.25
-day 22 - 21.8.25
-day 23 - 22.8.25 (F)
+day 22 - 21.8.25		load-balancer
+day 23 - 22.8.25 (F)		auto scaling groups
 
 WEEK - 6
-day24 - 25.8.25 (M)
+day24 - 25.8.25 (M)		
 day25 - 26.8.25
 day26 - 27.8.25 (Wed) 	HOLIDAY
 day27 - 28.8.25
@@ -59,17 +59,57 @@ day39 - 15.9.25 (M)
 day40 - 16.9.25  
 day41 - 17.9.25  
 day42 - 18.9.25    
-day43 - 19.9.25 (F)  
+day43 - 19.9.25 (F)  		Test
 
 WEEK - 10
-day44 - 22.9.25 (M) 		what is cloudwatch and cloudtrail with real time example in aws?
+day44 - 22.9.25 (M) 		cloudwatch & cloudtrail
 day45 - 23.9.25  		Lambda (functions -serverless)
-day46 - 24.9.25  		Lamds - SNS (micro-services)
+day46 - 24.9.25  		Lamds & SNS (micro-services)
 day47 - 25.9.25  
 day48 - 26.9.25 (F)   
+-------------------------
+OFFLINE Classes:
+-------------------------
+WEEK - 11
+day49 - 29.9.25 (M)  		Bio-Metrics - Print attendance
+day50 - 30.9.25  		Databases
+day51 - 1.10.25  		Holiday
+day52 - 2.10.25    		Holiday
+day53 - 3.10.25 (F)  		RDS
 
+WEEK - 12
+day54 - 6.10.25 (M)  		DynamoDB
+day55 - 7.10.25  		ElaticCache,Redshift,EMP, Athena,Quicksight, documentDB, neptune, QLDB,glue,DMS
+day56 - 8.10.25  		IAM - STS,Cognito,Microsoft-AD,IAM Identity,ML-Rekognition,Transcribe,Polly,Translate,Lex,Connect,Comprehend,Sagemaker,Forecast,kendra,personalize,textract
+day57 - 9.10.25    		CAF
+day58 - 10.10.25 (F)  	I_am_Absent
+day59 - 11.10.25    		Route 53
+
+WEEK - 13
+day60 - 13.10.25 (M)  	Wavelength, local zones
+day61 - 14.10.25  		(Seminar) Explained - Wavelength, local zones
+day62 - 15.10.25  		 Security&compliance - WAF, Shield, Penetration testing
+day63 - 16.10.25    		 KMS,cloudHSM,Artifact,inspector,config,detective
+day64 - 17.10.25 (F)		 Billing and Cost management topics 	 
+
+---
+
+
+-------------
+STAR - Learn and Be cautios:
+Situation:- 
+	When I joined my college. I don't know anything about coding and web development.
+Task:- 	
+	I want to create a website using HTML, CSS, and JS.
+Actions:- 	
+	I got curious when learning the concepts of web development and its fundamentals. So, I kept learning and I mastered some of those languages. I even expanded my knowledge by working on my own projects based on that. 
+Result:- 	
+	I got a good foundation in web development concepts. Then, I created many projects on my own, which I learned by curiosity about how things work on websites and the internet.
+-------------------
+PROMPTS:
 
 => 	just list the 
  and explain in detail for each commands with example
 => 	what is 
 in aws and how and why it is used?
+
