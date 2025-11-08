@@ -1,0 +1,397 @@
+Networking:
+
+Subnet Classes:-
+1–126 → Class A	-	/8
+128–191 → Class B	-	/16
+192–223 → Class C	-	/24
+
+IP to Binary:
+
+=> 1 2 4 8 16 32 64 128
+
+1 - 150.10.20.32
+10010110.00001010.00010100.00100000
+
+2 - 176.150.0.1
+10110000.10010110.00000000.00000001
+
+3 - 192.168.37.200
+11000000.10101000.00100101.11001000
+
+4 - 172.30.128.8
+10101100.00011110.10000000.00001000
+
+5 - 197.10.10.0
+11000101.00001010.00001010.00000000
+
+
+IP Address:  222.7.3.4 / 27
+
+1 2 4 8 16 32 64 128 = 255
+
+Class - C
+Subnet Mask       -	255.255.255.224 (128+64+32)         =>  27 - 24 = 3(1s)      => 1110 0000
+222.7.3.4 	         -   	1101 1110.0000 0111.0000 0011.0000 0100
+255.255.255.224 -     1111 1111.1111 1111.1111 1111.1110 0000
+1101 1110.0000 0111.0000 0011.0000 0000
+222.7.3.0
+
+Network ID        -      222.7.3.0
+No .of. subnets    -     2n = 2(3)  = 2 * 2 * 2= 4 * 2 = 8
+No. of hosts        -     2n - 2 = 2(5) - 2 = 32 - 2 = 30
+Block size           -      256 - 224 = 32  
+
+Subnet 1 :
+Network ID: 	222.7.3.0
+Host ID: 		222.7.3.1 - 30
+Broadcast ID:	222.7.3.31
+
+Subnet 2 :
+Network ID: 	222.7.3.32
+Host ID: 		 33 - 62
+Broadcast ID:	222.7.3.63
+
+Subnet 3 :
+Network ID: 	222.7.3.64 
+Host ID: 		 65 - 94
+Broadcast ID:	222.7.3.95 
+
+Subnet 4 :
+Network ID: 	222.7.3.96  
+Host ID: 		  97 - 126  
+Broadcast ID:	222.7.3.127
+
+5
+Network ID: 	222.7.3.128  
+Host ID: 		  129 - 158  
+Broadcast ID:	222.7.3.159
+
+6
+Network ID: 	222.7.3.160  
+Host ID: 		 161 - 190
+Broadcast ID:	222.7.3.191
+
+7
+Network ID: 	222.7.3.192  
+Host ID: 		  193 - 222
+Broadcast ID:	222.7.3.223
+
+8
+Network ID: 	222.7.3.224  
+Host ID: 		  225 - 254
+Broadcast ID:	222.7.3.255
+
+
+
+Task 4 - Subnetting
+
+1 -  150.10.20.32/20
+2 -  176.150.0.1/22
+3 -  192.168.37.200/29
+4 -  172.30.128.8/18
+5 -  197.10.10.0/28
+6 -  180.4.3.2/27
+7 -  10.0.50.100/27
+
+SOLUTIONS:
+1 2 4 8 16 32 64 128 = 255
+
+
+i -  150.10.20.32 / 20
+
+Class - B
+Subnet Mask      :    255.255.240.0  
+
+		150.10.20.32 	=    1010 0000.0000 1010.0001 0100.0010 0000
+		255.255.240.0   =    1111 1111.1111 1111.1111 0000.0000 0000
+             -------------------------------------------------------------------------------------
+		150.10.16.0 	=    1010 0000.0000 1010.0001 0000.0000 0000 
+
+if 1 + 1 = 1
+if 0 + 1 = 0 
+if 1 + 0 = 0  
+ 
+Network ID       :     150.10.0.0 / 16
+			       150.10.16.0 / 20
+No .of. subnets   :     2n (n=4) =  20 - 16 = 4 => 2(4) = 2*2*2*2 = 8*2 = 16
+No. of hosts       :    2n - 2 = 2*12 - 2 = 16 - 2 = 4096 - 2 = 4094
+Block size	  	 :	256 - (128+64+32+16) = 256 - 240 = 16
+
+Subnet 1:
+Network id     :   150.10.0.0
+Host id	     :    150.10.0.1 - 150.10.15.254
+Broadcast id   :    150.10.15.255
+
+Subnet 2:
+Network id     :   150.10.16.0
+Host id	     :    150.10.16.1 - 150.10.31.254
+Broadcast id   :    150.10.31.255
+
+Subnet 3:
+Network id     :   150.10.32.0
+Host id	     :    150.10.32.1 - 150.10.47.254
+Broadcast id   :    150.10.47.255
+
+subnet 4 to subnet 14:
+
+Subnet 15:
+Network id     :   150.10.224.0
+Host id	     :    150.10.224.1 - 150.10.239.254
+Broadcast id   :    150.10.239.255
+
+Subnet 16:
+Network id     :   150.10.240.0
+Host id	     :    150.10.240.1 - 150.10.255.254
+Broadcast id   :    150.10.255.255
+
+
+
+2 -  176.150.0.1/22
+128 64 32 16  8 4 2 1
+
+Class - B
+Subnet Mask		: 	255.255.252.0  = 8+8=16 (default) + 6 = 22
+176.150.0.1		-	1100 1111.1010 0000.0000 0000.0000 0001
+255.255.252.0		-	1111 1111.1111 1111.1111 1100.0000 0000
+
+Network id		: 	176.150.0.0 ( 1100 1111.1010 0000.0000 0000.0000 0000)
+No. of. Subnets		:  	2n = 2 (6) = 2*2*2 *2*2*2 = 8 * 8 = 64
+No. of. Hosts		:	2n - 2 = 2(n=10) - 2 = 2*2 * 2*2 * 2*2 * 2*2 * 2*2 = 4*4*4*4*4=16*16*4= 1024 - 2 = 1022
+Block Size			: 	256 - 252 = 4
+
+Subnet 1:
+Network id	:    176.150.0.0
+Host id		:    176.150.0.1 - 176.150.3.254 
+Broadcast id 	:    176.150.3.255 
+
+Subnet 2:
+Network id	:    176.150.4.0
+Host id		:    176.150.4.1 - 176.150.7.254 
+Broadcast id 	:    176.150.7.255 
+
+Subnet 3:
+Network id	:    176.150.8.0
+Host id		:    176.150.8.1 - 176.150.11.254 
+Broadcast id 	:    176.150.11.255 
+
+Subnet 4:
+Network id	:    176.150.12.0
+Host id		:    176.150.12.1 - 176.150.15.254 
+Broadcast id 	:    176.150.15.255 
+.
+.
+.
+.
+.
+Subnet 64:
+Network id	:    176.150.252.0
+Host id		:    176.150.252.1 - 176.150.255.254 
+Broadcast id 	:    176.150.255.255 
+
+
+3 -  192.168.37.200/29
+
+128 64 32 16  8 4 2 1
+
+Class - C
+Subnet Mask		: 	255.255.255.248 (1111 1000 = 128 + 64+ 32 + 16 + 8 = 248)
+192.168.37.200 		-	1100 0000.1010 1000.0010 0111.1100 1000
+255.255.255.248	-	1111 1111.1111 1111.1111 1111.1111 1000
+				
+Network id		: 	192.168.37.200   (1100 0000.1010 1000.0010 0111.1100 1000)
+No. of. Subnets		:  	2n = 2(5) = 2*2*2*2*2= 4*4*2= 16*2 = 32
+No. of. Hosts		:	2n - 2 = 2(n=3) - 2 => 8 - 2 = 6 
+Block Size			: 	256 - 248 (128+64+32+16+8) = 8
+
+Subnet 1:
+Network id	:    192.168.37.0
+Host id		:    192.168.37.1 - 192.168.37.6
+Broadcast id 	:    192.168.37.7
+
+Subnet 2 to 22:
+.
+.
+.
+.
+Subnet 26:
+Network id	:    192.168.37.200
+Host id		:    192.168.37.201 - 192.168.37.206
+Broadcast id 	:    192.168.37.207
+
+Subnet 27:
+Network id	:    192.168.37.208
+Host id		:    192.168.37.209 - 192.168.37.214
+Broadcast id 	:     192.168.37.215
+
+Subnet 28:
+Network id	:    192.168.37.216
+Host id		:    192.168.37.217 - 192.168.37.222
+Broadcast id 	:    192.168.37.223
+
+Subnet 29:
+Network id	:    192.168.37.224
+Host id		:    192.168.37.225 - 192.168.37.230
+Broadcast id 	:     192.168.37.231
+
+Subnet 30:
+Network id	:    192.168.37.232
+Host id		:    192.168.37.233 - 192.168.37.239
+Broadcast id 	:    192.168.37.240
+
+Subnet 31:
+Network id	:    192.168.37.241
+Host id		:    192.168.37.242 - 192.168.37.247
+Broadcast id 	:     192.168.37.248
+
+Subnet 32:
+Network id	:    192.168.37.249
+Host id		:    192.168.37.249 - 192.168.37.254
+Broadcast id 	:     192.168.37.255
+
+
+
+4 -  172.30.128.8/18
+
+128 64 32 16 // 8 4 2 1
+
+Class - B
+Subnet Mask		: 	255.255.192.0
+Network id		: 	172.30.0.0/16
+					172.30.128.0/18
+No. of. Subnets		:  	2n = 2(n=2) = 2(2) = 2 * 2 = 4
+No. of. Hosts		:	2n - 2 = 2(14) - 2 = 4096 * 4 - 2 = 16382
+Block Size			: 	256 - 192 = 64
+
+Subnet 1:
+Network id	:    172.30.0.0
+Host id		:    172.30.0.1 - 172.30.63.254
+Broadcast id 	:    172.30.63.255
+
+Subnet 2:
+Network id	:    172.30.64.0
+Host id		:    172.30.64.1  - 172.30.127.254
+Broadcast id 	:     172.30.127.255
+
+Subnet 3:
+Network id	:    172.30.128.0
+Host id		:    172.30.128.1  - 172.30.191.254
+Broadcast id 	:     172.30.191.255
+
+Subnet 4:
+Network id	:    172.30.192.0
+Host id		:    172.30.192.1  - 172.30.255.254
+Broadcast id 	:     172.30.255.255
+
+
+5 -  197.10.10.0/28
+
+128 64 32 16 // 8 4 2 1
+
+Class - C
+Subnet Mask		: 	255.255.255.240
+Network id		: 	197.10.10.0
+No. of. Subnets		:  	2n => n = 4 = 2*2*2*2 = 4*4= 16 Subnets
+No. of. Hosts		:	2n - 2 (n=4)=> 16 - 2 = 14
+Block Size			: 	256 - 240 = 16
+
+Subnet 1:
+Network id	:    197.10.10.0
+Host id		:     1 - 14
+Broadcast id 	:     197.10.10.15
+.
+.
+.
+Subnet 16:
+Network id	:  197.10.10.240
+Host id		:     241 - 254
+Broadcast id 	: 197.10.10.255    
+
+eg:2 - 197.10.10.0/24
+
+128 64 32 16 // 8 4 2 1
+
+Class - C
+Subnet Mask		: 	255.255.255.0
+Network id		: 	197.10.10.0
+No. of. Subnets		:  	2n => n = 0 = 2(0) = 1 Subnets
+No. of. Hosts		:	2n - 2 (n=8)=> 256 - 2 = 254
+Block Size			: 	256 - 0 = 256
+
+Subnet 1:
+Network id	:    197.10.10.0
+Host id		:     1 - 254
+Broadcast id 	:     197.10.10.255
+
+
+
+6 -  180.4.3.2/27
+7 -  10.0.50.100/27
+
+Class - A
+Subnet Mask		: 	255.255.255.224
+Network id		: 	10.0.0.0/27
+No. of. Subnets		:  	16
+No. of. Hosts		:	4094
+Block Size			: 	16
+
+Subnet 1:
+Network id	:    10.0.0.0
+Host id		:    10.0.0.1 - 15
+Broadcast id 	:     10.0.0.15
+
+Subnet 2:
+Network id	:    10.0.0.16
+Host id		:    10.0.0.17 - 30
+Broadcast id 	:    10.0.0.31 
+
+If you choose /26, the block size is 64 — every subnet will jump in increments of 64.
+If you choose /28, the block size is 16 — every subnet will jump in increments of 16.
+
+
+For Example:
+we need 10 subnets from  ip = 205.150.65.0
+Solution:-
+
+Class - C
+205.150.65.0 / 24 
+
+1 2 4 8--- 16 32 .... 256
+0 1 2 3 .....4 5 .......n
+2(power of)
+
+ 8 <= 10 >=16 , so 2 power 4 (n=4)
+=> now add default + extra 4.
+24 + 4 = 28. Hence, 205.150.65.0 / 24  ---> 205.150.65.0 / 28
+
+
+IP ->  222.7.3.4 / 27
+Subnet		-	255.255.255.224 
+network id		-	222.7.3.0/24
+				222.7.3.4/27
+
+no f subnet - 2n = (n=3) = 2*2*2 = 8
+no f hosts = 2n -2 = (n=5) = 8*4 -2 = 32 -2=  30 hosts
+block size = 256 - 224 = 32
+
+Subnet 1
+n/w id: 	222.7.3.0
+host :	222.7.3.1 - 30
+broadcast:	222.7.3.31
+.
+.
+.
+.
+subnet 8
+n/w id: 	222.7.3.224
+host :	222.7.3.225 - 254
+broadcast:	222.7.3.255
+
+KEY-POINTS:
+Determine the subnet of IP 222.7.3.4/27
+
+/27 block size = 32
+Network IDs start at 0, 32, 64, …
+222.7.3.4 falls in Subnet 1 → 222.7.3.0/27
+
+
+

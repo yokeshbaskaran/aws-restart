@@ -1,0 +1,642 @@
+LAB-1:
+
+Task 1: Connect to the Command Host
+In this task, you connect to an EC2 instance configured with a database client. The client is used to run structured query language (SQL) queries against a relational database. This instance is referred to as the Command Host.
+
+sudo su
+cd /home/ec2-user/
+Linux commands
+
+mysql -u root --password='re:St@rt!9'
+
+ The MySQL command-line client is an SQL shell that you can use to interact with database engines.
+
+Switch	Description
+-u or --user	The MySQL user name used to connect to a database instance
+-p or --password	The MySQL password used to connect to a database instance
+ Tip: At any stage of the lab, if the Session Manager window is not responsive or if you need to reconnect to the database instance, then follow these steps:
+
+sudo su
+cd /home/ec2-user/
+mysql -u root --password='re:St@rt!9'
+ 
+
+Task 2: Create a database and a table
+
+SHOW DATABASES;
+
+CREATE DATABASE world;
+
+
+SHOW DATABASES;
+
+CREATE TABLE world.country (
+  `Code` CHAR(3) NOT NULL DEFAULT '',
+  `Name` CHAR(52) NOT NULL DEFAULT '',
+  `Conitinent` enum('Asia','Europe','North America','Africa','Oceania','Antarctica','South  America') NOT NULL DEFAULT 'Asia',
+  `Region` CHAR(26) NOT NULL DEFAULT '',
+  `SurfaceArea` FLOAT(10,2) NOT NULL DEFAULT '0.00',
+  `IndepYear` SMALLINT(6) DEFAULT NULL,
+  `Population` INT(11) NOT NULL DEFAULT '0',
+  `LifeExpectancy` FLOAT(3,1) DEFAULT NULL,
+  `GNP` FLOAT(10,2) DEFAULT NULL,
+  `GNPOld` FLOAT(10,2) DEFAULT NULL,
+  `LocalName` CHAR(45) NOT NULL DEFAULT '',
+  `GovernmentForm` CHAR(45) NOT NULL DEFAULT '',
+  `HeadOfState` CHAR(60) DEFAULT NULL,
+  `Capital` INT(11) DEFAULT NULL,
+  `Code2` CHAR(2) NOT NULL DEFAULT '',
+  PRIMARY KEY (`Code`)
+);
+
+USE world;
+SHOW TABLES;
+
+SHOW COLUMNS FROM world.country;
+
+
+The ALTER TABLE command is used to alter the table's schema. To fix the incorrectly spelled Continent column, run the following command.
+
+ALTER TABLE world.country RENAME COLUMN Conitinent TO Continent;
+To verify that the Continent column name in the country table has been corrected, run the following query.
+
+SHOW COLUMNS FROM world.country;
+ 
+Challenge 1
+Create a table named city and add two columns named Name and Region. Both columns should use the CHAR data type.
+Tip: Expand the question to reveal the solution.
+ 
+
+Task 3: Delete a database and tables
+In this task, you delete the world database and country table.
+
+The DROP TABLE command is used to delete (drop) a table in a database. Once a table has been dropped, it cannot be recovered unless a backup is available. To drop the city table, run the following command.
+
+DROP TABLE world.city;
+ 
+Challenge 2
+Write a query to drop the country table.
+Tip: Expand the question to reveal the solution.
+
+To verify that both tables have been dropped, run the following query.
+
+SHOW TABLES;
+To drop the world database, run the following command.
+
+DROP DATABASE world;
+To verify that the world database has been deleted, run the following query.
+
+SHOW DATABASES;
+ 
+
+LAB-2:
+
+Task 1: Connect to a database
+
+sudo su
+cd /home/ec2-user/
+ Tips:
+
+Copy and paste the command into the Session Manager terminal window.
+If you are using a Windows system, press Shift+Ctrl+v to paste the command.
+To connect to the database instance, run the following command in the terminal. A password was configured when the database was installed.
+
+mysql -u root --password='re:St@rt!9'
+ The MySQL command-line client is a SQL shell that you can use to interact with database engines.
+
+Switch	Description
+-u or --user	The MySQL user name used to connect to a database instance
+-p or --password	The MySQL password used to connect to a database instance
+  Tip: At any stage of the lab, if the Sessions Manager window is not responsive or if you need to reconnect to the database instance, then follow these steps:
+
+Close the Sessions Manager window, and try to reconnect using the previous steps.
+Run the following commands in the terminal.
+sudo su
+cd /home/ec2-user/
+mysql -u root --password='re:St@rt!9'
+To show the existing databases, enter the following command in the terminal. Make a note of the currently available databases.
+
+SHOW DATABASES;
+ 
+
+Task 2: Insert data into a table
+In this task, you insert sample data into the country table.
+
+To verify that the country table exists, run the following command. The SELECT statement is used to identify the columns that should be included in the result set. The use of the * denotes all columns. The FROM clause is used in the following example to specify the database and table that is queried.
+
+SELECT * FROM world.country;
+To insert rows into the country table, run the following commands. The values in the VALUES clause need to be in the same order as defined by the table schema.
+
+INSERT INTO world.country VALUES ('IRL','Ireland','Europe','British Islands',70273.00,1921,3775100,76.8,75921.00,73132.00,'Ireland/Éire','Republic',1447,'IE');
+
+INSERT INTO world.country VALUES ('AUS','Australia','Oceania','Australia and New Zealand',7741220.00,1901,18886000,79.8,351182.00,392911.00,'Australia','Constitutional Monarchy, Federation',135,'AU');
+To verify that two rows were successfully inserted into the country table, run the following query.
+
+SELECT * FROM world.country WHERE Code IN ('IRL', 'AUS');
+The table should now contain two rows and should appear as follows.
+
+Code	Name	Continent	Region	SurfaceArea	IndepYear	Population	LifeExpectancy	GNP	GNPOld	LocalName	GovernmentForm	Capital	Code2
+AUS	Australia	Oceania	Australia and New Zealand	7741220	1901	18886000	79.8	351182	392911	Australia	Constitutional Monarchy, Federation	135	AU
+IRL	Ireland	Europe	British Islands	70273	1921	3775100	76.8	75921	73132	Ireland/Éire	Republic	1447	IE
+ 
+
+Task 3: Update rows in a table
+In this task, you update both rows in the country table using an UPDATE statement.
+
+To set the value in the Population column to 0 for both rows in the country table, run the following UPDATE statement.
+
+UPDATE world.country SET Population = 0;
+
+SELECT * FROM world.country;
+
+UPDATE world.country SET Population = 100, SurfaceArea = 100;
+
+SELECT * FROM world.country;
+ 
+
+Task 4: Delete rows from a table
+In this task, you delete rows in the country table using a DELETE statement.
+
+Exercise caution when using data manipulation statements such as UPDATE and DELETE because these changes may not be reversible.
+
+To delete ALL rows from the country table, run the following command.
+
+SET FOREIGN_KEY_CHECKS = 0;
+DELETE FROM world.country;
+
+
+SELECT * FROM world.country;
+ 
+
+Task 5: Import data using an SQL file
+In this task, you import sample data into the country table using an SQL file.
+
+To exit the MySQL terminal, run the following command.
+
+QUIT;
+
+ls /home/ec2-user/world.sql
+Recall Linux commands
+
+mysql -u root --password='re:St@rt!9' < /home/ec2-user/world.sql
+This database file adds two additional tables and inserts data into all three tables.
+
+To reconnect to the database, run the following command.
+
+mysql -u root --password='re:St@rt!9'
+To verify that the script ran successfully, run the following command.
+
+USE world;
+SHOW TABLES;
+Observe that there are three tables named city, country, and countrylanguage.
+
+To verify that the rows were loaded successfully, run the following command.
+
+SELECT * FROM country;
+Notice that there are more entries in the country table.
+
+Similarly, use the SELECT statement to query the city and countrylanguage tables that were created when you imported the backup file.
+
+LAB-3:
+Task 1: Connect to the Command Host
+
+sudo su
+cd /home/ec2-user/
+ Tips:
+
+Copy and paste the command into the Session Manager terminal window.
+If you are using a Windows system, press Shift+Ctrl+v to paste the command.
+To connect to the database server, run the following command in the terminal. A password was configured when the database was installed.
+
+mysql -u root --password='re:St@rt!9'
+ Tip: At any stage of the lab, if the Sessions Manager window is not responsive or if you need to reconnect to the database, then follow these steps:
+
+Close the Sessions Manager window, and try to reconnect using the previous steps.
+Run the following commands in the terminal.
+sudo su
+cd /home/ec2-user/
+mysql -u root --password='re:St@rt!9'
+ 
+
+Task 2: Query the world database
+In this task, you query the world database using various SELECT statements and database operators.
+
+To show the existing databases, enter the following command in the terminal.
+
+SHOW DATABASES;
+Verify that a database named world is available. If the world database is not available, then contact your instructor.
+
+To list all rows and columns in the country table, run the following query.
+
+SELECT * FROM world.country;
+
+SELECT COUNT(*) FROM world.country;
+
+SHOW COLUMNS FROM world.country;
+
+SELECT Name, Capital, Region, SurfaceArea, Population FROM world.country;
+
+SELECT Name, Capital, Region, SurfaceArea AS "Surface Area", Population FROM world.country;
+
+
+SELECT Name, Capital, Region, SurfaceArea AS "Surface Area", Population FROM world.country ORDER BY Population;
+
+
+SELECT Name, Capital, Region, SurfaceArea AS "Surface Area", Population FROM world.country ORDER BY Population DESC;
+
+SELECT Name, Capital, Region, SurfaceArea AS "Surface Area", Population FROM world.country WHERE Population > 50000000 ORDER BY Population DESC;
+
+SELECT Name, Capital, Region, SurfaceArea AS "Surface Area", Population FROM world.country WHERE Population > 50000000 AND Population < 100000000 ORDER BY Population DESC;
+ 
+
+Challenge
+Query the country table to return a set of records based on the following question.
+
+Which country in Southern Europe has a population greater than 50,000,000?
+ Tip: Expand the question to reveal the solution.
+
+
+LAB-4:
+Task 1: Connect to the Command Host
+
+sudo su
+cd /home/ec2-user/
+ Tips:
+
+Copy and paste the command into the Session Manager terminal window.
+If you are using a Windows system, press Shift+Ctrl+V to paste the command.
+To connect to the database server, run the following command. A password was configured when the database was installed.
+
+mysql -u root --password='re:St@rt!9'
+ Tip: At any stage of the lab, if the Session Manager window is not responsive or if you need to reconnect to the database instance, then follow these steps:
+
+Close the Session Manager window, and try to reconnect using the previous steps.
+
+Run the following commands in the terminal.
+
+sudo su
+cd /home/ec2-user/
+mysql -u root --password='re:St@rt!9'
+ 
+
+Task 2: Query the world database
+
+SHOW DATABASES;
+
+SELECT * FROM world.country;
+By reducing the number of records, the result set would be smaller and easier to work with. To limit the number of records returned, you can use a WHERE clause to define the conditions that records must match.
+
+Use the AND operator to combine two conditions. Each record is checked against both conditions before it's included in the result set. You can use the > operator and = operator to query values that are greater than or equal to a certain value. Similarly, you can combine the < operator and = operator to query values that are less than or equal to a certain value.
+
+To reduce the number of records in the result set by using a WHERE clause and the AND operator, run the following query.
+
+SELECT Name, Capital, Region, SurfaceArea, Population FROM world.country WHERE Population >= 50000000 AND Population <= 100000000;
+
+SELECT Name, Capital, Region, SurfaceArea, Population FROM world.country WHERE Population BETWEEN 50000000 AND 100000000;
+
+To return the population of all European countries by using the LIKE function and SUM function, run the following query.
+
+SELECT sum(Population) from world.country WHERE Region LIKE "%Europe%";
+
+SELECT sum(population) as "Europe Population Total" from world.country WHERE region LIKE "%Europe%";
+
+SELECT Name, Capital, Region, SurfaceArea, Population from world.country WHERE LOWER(Region) LIKE "%central%";
+ 
+
+Challenge
+Write a query to return the sum of the surface area and sum of the population of North America.
+
+Query the table first to determine which columns and operators to use.
+SELECT SUM(SurfaceArea) as "N. America Surface Area", SUM(Population) as "N. America Population" FROM world.country WHERE Region = "North America";
+
+Tip: Expand the question to reveal the solution.
+
+LAB-5:
+
+Task 1: Connect to the Command Host
+ 
+sudo su
+cd /home/ec2-user/
+ Tips:
+
+Copy and paste the command into the Session Manager terminal window.
+If you are using a Windows system, press Shift+Ctrl+v to paste the command.
+To connect to the database server, run the following command in the terminal. A password was configured when the database was installed.
+
+mysql -u root --password='re:St@rt!9'
+ Tip: At any stage of the lab, if the Sessions Manager window is not responsive or if you need to reconnect to the database instance, then follow these steps:
+
+Close the Sessions Manager window, and try to reconnect using the previous steps.
+Run the following commands in the terminal.
+sudo su
+cd /home/ec2-user/
+mysql -u root --password='re:St@rt!9'
+ 
+
+Task 2: Query the world database
+In this task, you query the world database using various SELECT statements and database functions. You use a
+
+
+SHOW DATABASES;
+SELECT * FROM world.country;
+
+SELECT sum(Population), avg(Population), max(Population), min(Population), count(Population) FROM world.country;
+
+SUM() adds all the population values together.
+AVG() generates an average across all the population values.
+MAX() finds the row with the highest population value.
+MIN() finds the row with the lowest population value.
+COUNT() finds the number of rows with a population value.
+In some cases, you might need to split a string. The following query uses SUBSTRING_FUNCTION() to spilt a string where a space occurs. Run the following query.
+
+SELECT Region, substring_index(Region, " ", 1) FROM world.country;
+
+
+
+SELECT Name, Region from world.country WHERE substring_index(Region, " ", 1) = "Southern";
+
+SELECT Region FROM world.country WHERE LENGTH(TRIM(Region)) < 10;
+
+SELECT DISTINCT(Region) FROM world.country WHERE LENGTH(TRIM(Region)) < 10;
+ 
+
+Challenge
+
+
+Write a query to return rows that have Micronesian/Caribbean as the name in the region column. The output should split the region as Micronesia and Caribbean into two separate columns: one named Region Name 1 and one named Region Name 2.
+SELECT Name, substring_index(Region, "/", 1) as "Region Name 1",substring_index(region, "/", -1) as "Region Name 2" FROM world.country WHERE Region = "Micronesia/Caribbean";
+
+Tip: Expand the question to reveal the solution.
+
+LAB-6:
+
+Task 1: Connect to the Command Host
+In this task, you connect to an instance containing a database client, which is used to connect to a database. This instance is referred to as the Command Host.
+
+In the AWS Management Console, choose the  Services menu. Under Compute, choose EC2.
+
+In the navigation pane, choose Instances.
+
+Next to the instance labelled Command Host, select the check box  and then choose Connect.
+
+Note: If you do not see the Command Host, the lab is possibly still being provisioned, or you may be using another Region.
+
+For Connect to instance, choose the Session Manager tab.
+
+Choose Connect to open a terminal window.
+
+Note: If the Connect button is not available, wait for a few minutes and try again.
+
+To configure the terminal to access all required tools and resources, run the following command:
+
+sudo su
+cd /home/ec2-user/
+ Tips:
+
+Copy and paste the command into the Session Manager terminal window.
+If you are using a Windows system, press Shift+Ctrl+v to paste the command.
+To connect to the database server, run the following command in the terminal. A password was configured when the database was installed.
+
+mysql -u root --password='re:St@rt!9'
+ Tip: At any stage of the lab, if the Sessions Manager window is not responsive or if you need to reconnect to the database instance, then follow these steps:
+
+Close the Sessions Manager window, and try to reconnect using the previous steps.
+Run the following commands in the terminal.
+sudo su
+cd /home/ec2-user/
+mysql -u root --password='re:St@rt!9'
+ 
+
+Task 2: Query the world database
+In this task, you query the world database using various SELECT statements and database functions.
+
+To show the existing databases, enter the following command in the terminal.
+
+SHOW DATABASES;
+Verify that a database named world is available. If the world database is not available, contact your instructor.
+
+To review the table schema, data, and number of rows in the country table, enter the following query.
+
+SELECT * FROM world.country;
+To return a list of records where the Region is Australia and New Zealand, run the following query. This query includes an ORDER BY clause (which a previous lab introduced) that arranges the results by Population in descending order.
+
+SELECT Region, Name, Population FROM world.country WHERE Region = 'Australia and New Zealand' ORDER By Population desc;
+You can use the GROUP BY clause to group related records together. The following example starts by filtering records using a condition where the region is equal to Australia and New Zealand. The results are then grouped together by using a GROUP BY clause. The SUM() function is then applied to the grouped results to generate a total population for that region. Run the following query in your terminal.
+
+SELECT Region, SUM(Population) FROM world.country WHERE Region = 'Australia and New Zealand' GROUP By Region ORDER By SUM(Population) desc;
+This query returns a SUM() of the Population for the Australia and New Zealand region. Because the WHERE clause is filtered by Region, only the Australia and New Zealand records are aggregated.
+
+The following example uses a windowing function to generate a running total by adding the Population of the first record to the Population of the second record and subsequent records. This query uses the OVER() clause to group the records by Region and uses the SUM() function to aggregate the records. The output displays the population of a country along side a running total of the region. Run the following query in your terminal.
+
+SELECT Region, Name, Population, SUM(Population) OVER(partition by Region ORDER BY Population) as 'Running Total' FROM world.country WHERE Region = 'Australia and New Zealand';
+The following query groups the records by Region and orders them by Population with the OVER() clause. This query also includes the RANK() function to generate a rank number indicating the position of each record in the result set. The RANK() function is useful when dealing with large groups of records. Run the following query in your terminal.
+
+SELECT Region, Name, Population, SUM(Population) OVER(partition by Region ORDER BY Population) as 'Running Total', RANK() over(partition by region ORDER BY population) as 'Ranked' FROM world.country WHERE region = 'Australia and New Zealand';
+ 
+
+Challenge
+Write a query to rank the countries in each region by their population from largest to smallest.
+
+You have to determine whether to use either the GROUP BY or OVER grouping clause and either the SUM() or RANK() function.
+SELECT Region, Name, Population, RANK() OVER(partition by Region ORDER BY Population desc) as 'Ranked' FROM world.country order by Region, Ranked;
+
+Tip: Expand the question to reveal the solution.
+
+
+LAB-7:
+
+Task 1: Create a Security Group for the RDS DB Instance
+In this task, you will create a security group to allow your web server to access your RDS DB instance. The security group will be used when you launch the database instance.
+
+In the AWS Management Console, select the  Services menu, and then select VPC under Networking & Content Delivery.
+
+In the left navigation pane, click Security Groups.
+
+Click Create security group and then configure:
+
+Security group name: DB Security Group
+
+Description: Permit access from Web Security Group
+
+VPC: Lab VPC
+
+You will now add a rule to the security group to permit inbound database requests. The security group currently has no rules. You will add a rule to permit access from the Web Security Group.
+
+In the Inbound rules section, click Add rule, then configure:
+
+Type: MySQL/Aurora (3306)
+
+Source: Type sg in the search field and then select Web Security Group.
+
+This configures the Database security group to permit inbound traffic on port 3306 from any EC2 instance that is associated with the Web Security Group.
+
+Scroll to the bottom of the screen, then click Create security group
+
+You will use this security group when launching the Amazon RDS database.
+
+ 
+
+Task 2: Create a DB Subnet Group
+In this task, you will create a DB subnet group that is used to tell RDS which subnets can be used for the database. Each DB subnet group requires subnets in at least two Availability Zones.
+
+In the AWS Management Console, select the  Services menu, and then select RDS under Database.
+
+In the left navigation pane, click Subnet groups.
+
+ If the navigation pane is not visible, click the  menu icon in the top-left corner.
+
+Click Create DB Subnet Group then configure:
+
+Name: DB Subnet Group
+
+Description: DB Subnet Group
+
+VPC ID: Lab VPC
+
+In the Add subnets section for Availability zones, click the , then:
+
+Select  the first Availability zone
+
+Select  the second Availability zone
+
+For Subnets, click the , then:
+
+For the first Availability zone, select  10.0.1.0/24
+
+For the second Availability zone, select  10.0.3.0/24
+
+Click Create
+
+This adds Private Subnet 1 (10.0.1.0/24) and Private Subnet 2 (10.0.3.0/24). You will use this DB subnet group when creating the database in the next task.
+
+ 
+
+Task 3: Create an Amazon RDS DB Instance
+In this task, you will configure and launch a Multi-AZ Amazon RDS for MySQL database instance.
+
+Amazon RDS Multi-AZ deployments provide enhanced availability and durability for Database (DB) instances, making them a natural fit for production database workloads. When you provision a Multi-AZ DB instance, Amazon RDS automatically creates a primary DB instance and synchronously replicates the data to a standby instance in a different Availability Zone (AZ).
+
+In the left navigation pane, click Databases.
+
+Click Create database
+
+ If you see Switch to the new database creation flow at the top of the screen, please click it.
+
+Choose Create database, then choose Standard create.
+
+Under the Engine options section, for Engine type, choose MySQL.
+
+For Engine version, choose the latest version.
+
+For Templates, choose Dev/Test.
+
+For Availability and durability, choose Multi-AZ DB Instance.
+
+Under Settings, configure the following:
+
+DB instance identifier: lab-db
+
+Master username: main
+
+Master password: lab-password
+
+Confirm password: lab-password
+
+Under Instance configuration, configure the following for DB instance class:
+
+Select  Burstable classes (includes t classes).
+
+Select db.t3.medium.
+
+Under Storage, configure:
+
+Select General Purpose (SSD) under Storage type.
+
+Under Connectivity, configure:
+
+Virtual Private Cloud (VPC): Lab VPC
+
+Under VPC security group select Choose existing
+
+Under Existing VPC security groups
+
+Use X to Remove default.
+
+Select DB Security Group to highlight it in blue.
+
+Under Monitoring, expand Additional configuration and then configure the following:
+
+For Enhanced Monitoring, uncheck  Enable Enhanced monitoring.
+
+Scroll down to the  Additional configuration section and expand this option. Then configure:
+
+Initial database name: lab
+
+Under Backup, uncheck  Enable automated backups.
+
+ This will turn off backups, which is not normally recommended, but will make the database deploy faster for this lab.
+
+Scroll to the bottom of the screen, then click Create database
+
+Your database will now be launched.
+
+Click lab-db (click the link itself).
+
+You will now need to wait approximately 4 minutes for the database to be available. The deployment process is deploying a database in two different Availability zones.
+
+ Note: If you are prompted with the Suggested add-ons for lab-db window, choose Close
+
+ While you are waiting, you might want to review the Amazon RDS FAQs or grab a cup of coffee.
+
+Wait until the Status changes to Modifying or Available.
+
+Scroll down to the Connectivity & Security section and copy the Endpoint field.
+
+It will look similar to: lab-db.cggq8lhnxvnv.us-west-2.rds.amazonaws.com
+
+Paste the Endpoint value into a text editor. You will use it later in the lab.
+
+ 
+
+Task 4: Interact with Your Database
+In this task, you will open a web application running on your web server and configure it to use the database.
+
+Copy the WebServer IP address by selecting i AWS Details above these instructions you are currently reading.
+
+Open a new web browser tab, paste the WebServer IP address and press Enter.
+
+The web application will be displayed, showing information about the EC2 instance.
+
+At the top of the web application page, click the RDS link.
+
+A picture displaying the web application interface
+
+Figure: A picture displaying the web application interface.
+
+ 
+
+You will now configure the application to connect to your database.
+
+Configure the following settings:
+
+Endpoint: Paste the Endpoint you copied to a text editor earlier
+
+Database: lab
+
+Username: main
+
+Password: lab-password
+
+Click Submit
+
+A message will appear explaining that the application is running a command to copy information to the database. After a few seconds the application will display an Address Book.
+
+The Address Book application is using the RDS database to store information.
+
+Test the web application by adding, editing and removing contacts.
+
+The data is being persisted to the database and is automatically replicating to the second Availability Zone.
+
+
+LAB-8:
+LAB-9:

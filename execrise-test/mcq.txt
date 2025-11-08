@@ -1,0 +1,74 @@
+TOPICS:
+---
+
+Amazon Lightsail
+AWS Batch
+AWS Fargate
+AWS Lambda
+
+
+
+MCQs:
+---
+
+Amazon EC2
+ 	- it is a web service that provides resizable compute capacity in the cloud. It makes it possible to launch virtual servers, configure networking, and manage storage without maintaining physical hardware.
+ 	- Running scalable web applications and websites is a common use case for Amazon EC2
+
+Security groups
+ 	- it act as virtual firewalls that control inbound and outbound traffic to your EC2 instances.
+
+Instance Pricing
+
+On-demand:
+- On-Demand pricing is ideal for starting without commitment.
+
+ 
+How does Amazon EC2 Auto Scaling work in AWS?
+ - Amazon EC2 Auto Scaling automatically adds or removes instances based on performance data and application metrics.
+
+Amazon EC2 Auto Scaling:
+ 	- Amazon EC2 Auto Scaling is feature that automatically adds or removes EC2 instances based on demand. Amazon EC2 Auto Scaling helps maintain application availability and optimize costs by adjusting capacity automatically.
+
+ELB:
+ 	- Elastic Load Balancing distributes incoming application traffic across multiple EC2 instances. It helps improve application availability by ensuring no single instance becomes overwhelmed.
+
+
+-----
+AWS Lambda:
+	- It is an event-driven, serverless compute service that lets you run code without provisioning or managing servers.
+
+What does an AWS Identity and Access Management (IAM) resource-based policy control?
+	- Permissions to invoke the function
+
+three statements about a resource policy?
+✅ Determines who has access to invoke the function - Resource-based policies control who or what can invoke the Lambda function.
+✅ Can grant access to the Lambda function across AWS accounts - Resource policies allow cross-account access, enabling other AWS accounts to invoke your Lambda.
+✅ Can give Amazon S3 permission to initiate a Lambda function - Services like S3, SNS, or EventBridge can be granted permission via a resource-based policy to invoke Lambda.
+
+What is the importance of the IAM execution role?
+ 	- Gives your function permissions to interact with other services
+
+
+CloudFormation template	-	Like a house blueprint – you can treat infrastructure as code
+AWS SAM template		-	Streamlined CloudFormation Template for serverless applications
+AWS SAM CLI			-	Tool for local testing and debugging of serverless applications
+Deploy				-	AWS SAM CLI command for deploying AWS SAM template
+
+
+AWS X-Ray:
+	- it is a monitoring tool provides the ability to visualize the components of an application and the flow of API calls
+
+ 
+
+-----
+
+AWS Outposts
+ 	- it is a fully managed service that brings AWS infrastructure, services, APIs, and tools on-premises.
+	- You provide: power, cooling, physical space, local connectivity, physical security.
+	- AWS provides: hardware, software, monitoring, maintenance, and integration with the AWS cloud.
+
+Amazon Lightsail
+AWS Batch
+AWS Fargate
+AWS Lambda

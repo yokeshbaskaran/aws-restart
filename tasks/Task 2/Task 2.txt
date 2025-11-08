@@ -1,0 +1,64 @@
+TASK - 2 :
+
+1.  EBS Snapshot Transfer with Commands (moving data between AWS EC2 instances using snapshots).
+2.  Ubuntu GUI Installation (setting up XFCE + VNC for remote desktop).
+
+📌 1. EBS Snapshot Transfer :-
+Steps: 
+--------
+1.  Launch Instance-1→ Create a Linux EC2 instance.
+2.  Attach a new 10GB EBS volume→ from AWS console, attach to Instance-1.
+3.  Format & Mount→ format it (`mkfs`), mount to `/data`.
+4.  Make mount permanent→ add UUID entry in `/etc/fstab`.
+5.  Add test files→ create `hello.txt`, `readme.txt` inside `/data`.
+6.  Unmount→ ensures clean snapshot.
+7.  Take Snapshot→ from AWS console → Volumes → Create Snapshot.
+8.  Detach original volume→ detach from Instance-1.
+9.  Launch Instance-2→ another Linux EC2.
+10.  Create new volume from snapshot→ same AZ as Instance-2.
+11.  Attach to Instance-2→ mount at `/data`.
+12.  Verify files→ check that `hello.txt` and `readme.txt` exist.
+13. (Optional)  Persist mounton Instance-2 using `/etc/fstab`.
+14. (Optional)  Cleanupvolumes/snapshots to save costs.
+
+ Instance-1 → Extra EBS → Snapshot → New EBS → Attach to Instance-2 → Files available there. 
+
+---
+📌 2. Installing GUI on Linux/Ubuntu using XRDP
+Steps: 
+--------
+1 - sudo apt update && sudo apt upgrade -y
+2 - sudo apt install xfce4 xfce4-goodies -y
+     sudo apt install -y xfce4-session (if missing)
+
+=> use RDP and give permission in security group: RDP - 3389 - anywhere IPv4
+3. sudo apt install xrdp -y
+
+4. sudo systemctl status xrdp - checks
+sudo systemctl enable xrdp
+sudo systemctl start xrdp
+sudo systemctl restart xrdp
+
+5: Configure Default Session:
+echo "xfce4-session" | sudo tee /etc/skel/.xsession
+echo "xfce4-session" > ~/.xsession
+
+6. create new user 
+-> sudo adduser demo
+name: demo
+password: demo
+-> sudo usermod -aG sudo demo
+
+After those steps, connect using RDP with public IP.
+Session: xorg
+username:  demo
+password: demo
+
+
+Host Websites:
+-> 	sudo apt install -y apache2
+	sudo systemctl status apache2 
+	sudo systemctl start apache2
+
+->	sudo chmod 777 /var/www/html/
+

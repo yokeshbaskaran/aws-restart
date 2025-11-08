@@ -1,0 +1,74 @@
+
+VPC:
+
+ virtual networking
+Earlier, you compared the similarities between Amazon Web Services (AWS) services and traditional network topologies:
+
+Traditional topology		AWS service
+--------------------------------------------------
+Data center			Amazon VPC
+Router				Route tables
+Switches (subnets)		Subnets
+Firewall				Security groups and network access control lists (network ACLs)
+Servers & OS			Amazon Elastic Compute Cloud (Amazon EC2) instances
+Modem				Internet gateway
+
+
+VPC ip address		-	140.150.0.0/20
+
+Subnets:
+Public subnet		-	140.150.10.0 / 24		-	256 ips
+Private subnet		-	140.150.11.0 / 27		-	32 ips
+demo-subnet		-	140.150.11.32 / 28		-	16 ips
+
+Route Table:
+1. default RT  - (act as internet, so public):
+Routes:
+Destination 		Target
+140.150.0.0 / 20	local
+
+- Connecting with Internet gateway - for public:
+Internet gateway ID 			VPC ID
+igw-02f33d3a4bf7bfb5a		vpc-0e85723549a2f3fc7 | my-vpc
+
+- Create Internet gateway and attach to VPC, then connect to Route Table (public subnet):
+- After Creating IGW,  the RT looks like this
+
+Route Table:-
+Destination 		Target
+140.150.0.0 / 20	local
+0.0.0.0 / 0			igw-0dfd0000000	(Internet gateway - IGW for access internet from outside)
+
+Subnet Associations:
+Name			SubnetID:
+public			subnet-000/public
+
+2. created PRivate RT  -  (no internet,so private) :
+Routes:
+Destination 		Target
+140.150.0.0 / 20	local
+
+Diagram:
+Internet (IGW) --> Public Sub --> NAT GW (from Public to Private using ELASTIC IP) --> Private Subnet
+
+Connecting with NAT gateway - for private:
+NAT gateway ID	Public IP(Elastic-IP)		VPC ID						Subnet
+nat-045ab1s		13.204.103.203			vpc-0e85723549a2f3fc7 | my-vpc	subnet-abcd / public 
+		
+- Creating NAT gateway => 
+1.choose subnet (PUBLIC Subnet to make connection) and 
+2. Connect type = Public and then 
+3. assign a Elastic IP address.
+- then connect to Route Table (private subnet):
+After Creating IGW,  the RT looks like this.
+
+Destination 		Target
+140.150.0.0 / 20	local
+0.0.0.0 / 0			nat-0dfd0000000	(NAT gateway)
+- NAT gateway = for access temporary internet inside a private subnet inside a VPC.
+- if it is in Blackhole, check the status of NAT GateWay.
+
+Subnet Associations:
+Name			SubnetID:
+private			subnet-000/private
+

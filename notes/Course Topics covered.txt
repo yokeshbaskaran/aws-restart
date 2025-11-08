@@ -1,13 +1,11 @@
 Notes - AWS
- 
-North virigina (region) - started AWS
- - HQ of AWS
- - has 6 Available zone becoz of all data
 
-
-region based - only like mumbai
-global based - store in north virigina and available to every other regions.
-
+PROMPTS:
+=> 	just list the 
+ and explain in detail for each commands with example
+=> 	what is 
+in aws and how and why it is used?
+------------
 
 Topics Covered till date –
 

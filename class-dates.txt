@@ -1,33 +1,33 @@
 AWS Class dates   ✅ 
 
-WEEK - 1 ✅
+WEEK - 1 
 day 1 - 23.07.2025 		(Wednesday) = start date  - AWS course details
 day 2 - 24.07.25		computer/server/cloud
 day 3 - 25.07.25 (F) 		cloud computing/virtualization
 
-WEEK - 2 ✅
+WEEK - 2 
 day 4 - 28.7.25 (M) 		Data centers
 day 5 - 29.7.25 			global infrasturcture (AZ)
 day 6 - 30.7.25 
 day 7 - 31.7.25			IAM
 day 8 - 01.8.25  (F) - 		ABSENT (afternoon only)  - EC2(Elastic Compute Cloud)
 
-WEEK - 3  ✅
+WEEK - 3  
 day 09 - 4.8.25 (M)
-day 10 - 5.8.25  		linux
+day 10 - 5.8.25  		Linux & Commands
 day 11 - 6.8.25 
-day 12 - 7.8.25  		RecordedClass
+day 12 - 7.8.25  		Recorded Class - start
 day 13 - 8.8.25  (F) 		linux cmds & file permisions
 
-WEEK - 4 ✅
+WEEK - 4 
 day 14 - 11.8.25  (M) 	elastic ip & AMI - TASK explained Linux/Ubuntu Demo
 day 15 - 12.8.25 
-day 16 - 13.8.25 		ami, snapshot, task given
+day 16 - 13.8.25 		AMI, snapshot, task given
 day 17 - 14.8.25  		no class only attendance.
 day 18 - 15.8.25 (F) 		HOLIDAY
 
-WEEK - 5
-day 19 - 18.8.25 (M) 		 2nd task
+WEEK - 5 
+day 19 - 18.8.25 (M) 		2nd task
 day 20 - 19.8.25
 day 21 - 20.8.25
 day 22 - 21.8.25		load-balancer
@@ -41,24 +41,24 @@ day27 - 28.8.25
 day28 - 29.8.25 (F)		Virtualization Explained:  https://www.youtube.com/watch?v=UBVVq-xz5i0
 
 WEEK - 7
-day29 - 1.9.25 (M)
-day30 - 2.9.25
-day31 - 3.9.25  
+day29 - 1.9.25 (M)		Networking
+day30 - 2.9.25			
+day31 - 3.9.25  			
 day32 - 4.9.25
-day33 - 5.9.25 (F) 		Onam Holiday
+day33 - 5.9.25 (F) 		HOLIDAY - Onam
 
 WEEK - 8
-day34 - 8.9.25 (M)
+day34 - 8.9.25 (M)		
 day35 - 9.9.25
 day36 - 10.9.25  
-day37 - 11.9.25
-day38 - 12.9.25 (F)  
+day37 - 11.9.25			Subnetting
+day38 - 12.9.25 (F)  		VPC
 
 WEEK - 9
-day39 - 15.9.25 (M)  
-day40 - 16.9.25  
-day41 - 17.9.25  
-day42 - 18.9.25    
+day39 - 15.9.25 (M)  		VPN
+day40 - 16.9.25  		Direct Connect
+day41 - 17.9.25  		Snow Family
+day42 - 18.9.25    		
 day43 - 19.9.25 (F)  		Test
 
 WEEK - 10
@@ -66,12 +66,12 @@ day44 - 22.9.25 (M) 		cloudwatch & cloudtrail
 day45 - 23.9.25  		Lambda (functions -serverless)
 day46 - 24.9.25  		Lamds & SNS (micro-services)
 day47 - 25.9.25  
-day48 - 26.9.25 (F)   
+day48 - 26.9.25 (F)   		END OF ONLINE CLASS.
 -------------------------
 OFFLINE Classes:
 -------------------------
 WEEK - 11
-day49 - 29.9.25 (M)  		Bio-Metrics - Print attendance
+day49 - 29.9.25 (M)  		OFFLINE START = Bio-Metrics & Print attendance
 day50 - 30.9.25  		Databases
 day51 - 1.10.25  		Holiday
 day52 - 2.10.25    		Holiday
@@ -80,10 +80,10 @@ day53 - 3.10.25 (F)  		RDS
 WEEK - 12
 day54 - 6.10.25 (M)  		DynamoDB
 day55 - 7.10.25  		ElaticCache,Redshift,EMP, Athena,Quicksight, documentDB, neptune, QLDB,glue,DMS
-day56 - 8.10.25  		IAM - STS,Cognito,Microsoft-AD,IAM Identity,ML-Rekognition,Transcribe,Polly,Translate,Lex,Connect,Comprehend,Sagemaker,Forecast,kendra,personalize,textract
+day56 - 8.10.25  		IAM - STS, Cognito, Microsoft-AD, IAM Identity, ML-Rekognition, Transcribe, Polly,  Translate, Lex, Connect, Comprehend, Sagemaker, Forecast, kendra, personalize, textract
 day57 - 9.10.25    		CAF
-day58 - 10.10.25 (F)  	I_am_Absent
-day59 - 11.10.25    		Route 53
+day58 - 10.10.25 (F)  	Absent
+day59 - 11.10.25 (Sat)	Route 53
 
 WEEK - 13
 day60 - 13.10.25 (M)  	Wavelength, local zones
@@ -92,24 +92,28 @@ day62 - 15.10.25  		 Security&compliance - WAF, Shield, Penetration testing
 day63 - 16.10.25    		 KMS,cloudHSM,Artifact,inspector,config,detective
 day64 - 17.10.25 (F)		 Billing and Cost management topics 	 
 
+WEEK - 14
+day65 - 20.10.25 (M)		 Diwali	 
+day66 - 21.10.25 		 Holiday	 
+day67 - 22.10.25 		 WAF	 
+day68 - 23.10.25 		 Other services	 
+day69 - 24.10.25 		 CI/CD	 
+day70 - 25.10.25 (Sat)	 end of RB AWS Class
+
+-------
+WEEK - 15
+day71 - 27.10.25 (M)		 Cultus Job skills
+day72 - 28.10.25 		 Star - 1
+day73 - 29.10.25 		 Star - 2
+day74 - 30.10.25 		 Star - 3
+day75 - 31.10.25 		 Star - 4
+day76 - 1.11.25 		 Absent
+
+WEEK - 16
+day77 - 3.11.25 (M)		 Absent
+day78 - 4.11.25 		
+day79 - 5.11.25 		 
+day80 - 6.11.25 		End of Cultus Job Readiness			 
+		  
 ---
-
-
--------------
-STAR - Learn and Be cautios:
-Situation:- 
-	When I joined my college. I don't know anything about coding and web development.
-Task:- 	
-	I want to create a website using HTML, CSS, and JS.
-Actions:- 	
-	I got curious when learning the concepts of web development and its fundamentals. So, I kept learning and I mastered some of those languages. I even expanded my knowledge by working on my own projects based on that. 
-Result:- 	
-	I got a good foundation in web development concepts. Then, I created many projects on my own, which I learned by curiosity about how things work on websites and the internet.
--------------------
-PROMPTS:
-
-=> 	just list the 
- and explain in detail for each commands with example
-=> 	what is 
-in aws and how and why it is used?
 

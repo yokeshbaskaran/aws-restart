@@ -1,0 +1,132 @@
+Task 5 :
+
+Peering Connection for:
+Same Account Same Region
+Same Account Different Region
+Different Account, Same Region
+Different Account, Different Region
+
+
+VPC:
+vpc - 150.10.0.0/18
+subnet1 - 150.10.0.0/24
+instance - private IP: 150.10.0.248
+
+Route table: 
+Destination  	Target
+----------------------------
+150.10.0.0/18 	 local
+
+Create Internet Gateway and attach to VPC.
+then ,Use Internet Gateway in Route Table (0.0.0.0/0) to use internet
+
+If not connected, it shows message: 
+"Failed to connect to your instance
+Error establishing SSH connection to your instance. Try again later."
+
+ 
+Route table is created default between public and private subnet. 
+To keep it private, create new route table using Subnet assciocations to only public.
+
+
+
+## 🔹 Step 1: Create / verify Internet Gateway (IGW)
+
+1. Go to **VPC Console → Internet Gateways**.
+2. Create an IGW (e.g., `my-vpc-igw`).
+3. Attach it to your VPC (`150.10.0.0/18`).
+
+150.10.0.0/18
+---
+
+## 🔹 Step 2: Create route tables
+1. **Public Route Table**
+
+   * Go to **VPC → Route Tables → Create route table**.
+   * Name it `Public-RT`.
+   * Associate it with your VPC.
+   * Edit **Routes** → Add:
+
+     * Destination: `0.0.0.0/0`
+     * Target: Your **Internet Gateway**
+
+2. **Private Route Table**
+
+   * Go to **Create route table** again.
+   * Name it `Private-RT`.
+   * Associate it with your VPC.
+   * Leave the default local route only (no IGW).
+   * (Optional: if you have a NAT Gateway, add route `0.0.0.0/0 → NAT Gateway` here.)
+---
+
+## 🔹 Step 3: Edit Subnet Associations
+
+1. Go to your **Public-RT** → **Subnet Associations → Edit subnet associations**.
+   * Select **`150.10.0.0/24` (your public subnet)**.
+   * Save.
+2. Go to your **Private-RT** → **Subnet Associations → Edit subnet associations**.
+   * Select **`150.10.20.0/24` (your private subnet)**.
+   * Save.
+
+---
+
+## 🔹 Step 4: Security groups & testing
+
+* For EC2 in the **public subnet**, make sure its **security group** allows inbound SSH/HTTP/HTTPS (as needed).
+* Assign a **public IP** (or Elastic IP).
+* For EC2 in the **private subnet**, no public IP. Access it only:
+
+  * From a bastion host in the public subnet, or
+  * Through a NAT Gateway (for outbound internet).
+
+---
+
+✅ Now:
+* `150.10.0.0/24` → **Public subnet** (internet-facing)
+* `150.10.20.0/24` → **Private subnet** (no direct internet access)
+
+=>  connet to 150.10.0.0/24 (Public subnet - public instance) ---->  150.10.20.0/24 (private subnet - private inst.)
+
+
+Peering Connection for:
+1. Same Account Same Region
+2. Same Account Different Region
+3. Different Account, Same Region
+4. Different Account, Different Region
+
+
+1.  connet to 150.10.0.0/24 (Public subnet - public instance) ---->  150.10.20.0/24 (private subnet - private inst.)
+
+
+Peering connection
+	- connection between two VPCs (sender and reciever)
+Steps
+1. enter Sender IP and reciever IP 
+2. accept the request of peering.
+
+Sender ip  		- 	150.10.0.0/18
+reciever ip 	- 	170.50.0.0/19
+
+Go to route tables and set ip with peering connection and peering id.
+
+Error:- If it went blachole, becoz you didnot accepted the peer connection request.
+
+Delete way:
+1. peering connection -> Route table entries
+2. vpc -> subnets -> Route table
+3. Route table (if created by user)
+
+
+
+2. same 1
+but 
+A VPC peering connection pcx-098e31705d9ac0648 / same-acc-diff-reg has been requested.
+Remember to change your region to us-east-1 to accept the peering connection.
+
+
+When launching a Public subnet instance:
+1. give vpc
+2. give public subnet
+3. enable auto-assign IP address (for private - may be enabled or disabled )
+
+

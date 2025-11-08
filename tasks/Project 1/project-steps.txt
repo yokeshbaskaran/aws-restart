@@ -1,0 +1,379 @@
+PROJECT-1:
+
+Nice diagram — you’re building a **file-conversion pipeline**: user uploads a doc → object lands in S3 → a queue notifies a worker → worker converts to PDF → converted file stored in S3 → DB + notification updated → website shows result.
+Below I’ll walk you through a simple, working way to implement that, aimed at a complete beginner. I give a short *server* (EC2) version (easiest for beginners) and outline serverless options afterwards.
+
+---
+
+## What you need before starting
+
+* An AWS account and access to the AWS Console (and optionally AWS CLI configured).
+* Basic comfort with Python (but I’ll include full example files).
+* A free EC2 keypair to SSH if you choose the EC2 route.
+* About ~30–60 minutes to follow the steps and test.
+
+---
+
+## High-level plan (the order you’ll do things)
+
+1. Create two S3 buckets: **uploads** and **converted**.
+2. Create an SQS queue and let the upload-bucket send object-created events to that queue.
+3. Create a DynamoDB table (to store metadata/status).
+4. Create an SNS topic (for email notifications).
+5. Launch an EC2 instance (or Lambda/Container) and install LibreOffice so it can convert DOCX → PDF.
+6. Deploy a tiny website on EC2 to let users upload files to the uploads-bucket.
+7. Run a worker (on EC2) that polls SQS: when a message arrives it downloads the file from S3, converts it, uploads the PDF to converted-bucket, writes metadata to DynamoDB and sends an SNS notification.
+8. Update your site to show converted links from the converted S3 bucket (or query DynamoDB).
+
+---
+
+# Detailed step-by-step (EC2 worker approach — easiest for a beginner)
+
+### Step 1 — Create two S3 buckets
+
+Go to AWS Console → S3 → Create bucket. Make names globally unique, e.g.:
+
+* `myproject-uploads-<yourname>-2025`
+* `myproject-converted-<yourname>-2025`
+
+Notes:
+
+* Keep versioning off for now (optional later).
+* If you will upload from the browser directly, set appropriate CORS (I’ll show server upload below so CORS is not required).
+
+---
+
+### Step 2 — Create an SQS queue
+
+Console → SQS → Create queue → name it `file-conversion-queue`.
+
+You’ll also need to let S3 send messages to SQS. Add a queue policy (in the SQS Console → Queue Actions → Edit queue policy) like this (replace ARNs):
+
+```json
+
+{
+
+&nbsp; "Version":"2012-10-17",
+
+&nbsp; "Statement":\[
+
+&nbsp;   {
+
+&nbsp;     "Sid":"AllowS3SendMessage",
+
+&nbsp;     "Effect":"Allow",
+
+&nbsp;     "Principal":{"Service":"s3.amazonaws.com"},
+
+&nbsp;     "Action":"sqs:SendMessage",
+
+&nbsp;     "Resource":"arn:aws:sqs:us-east-1:123456789012:file-conversion-queue",
+
+&nbsp;     "Condition":{"ArnEquals":{"aws:SourceArn":"arn:aws:s3:::myproject-uploads-<yourname>-2025"}}
+
+&nbsp;   }
+
+&nbsp; ]
+
+}
+
+```
+
+---
+
+### Step 3 — Configure S3 bucket notifications to send events to the SQS queue
+
+S3 Console → your uploads bucket → Properties → Event notifications → Create notification:
+
+* Event type: `PUT` (or “All object create events”)
+* Destination: SQS → choose your `file-conversion-queue`.
+
+Now every time an object is uploaded to the uploads bucket, S3 will send an S3 event message to the SQS queue.
+
+---
+
+### Step 4 — Create DynamoDB table and SNS topic
+
+* DynamoDB Console → Create table:
+
+  * Table name: `Files`
+  * Primary key: `fileId` (String) **or** `s3Key` if you prefer.
+* SNS Console → Create topic `file-conversion-notifications` → create an email subscription to receive notifications during testing.
+
+---
+
+### Step 5 — Launch an EC2 instance and prepare it
+
+1. Launch an Ubuntu or Amazon Linux instance (t2.micro for testing).
+2. Open ports 22 (SSH) and 80 (HTTP) in Security Group (if you host the website on the EC2).
+3. SSH in and run (Ubuntu example):
+
+```bash
+
+sudo apt-get update
+
+sudo apt-get install -y python3 python3-pip libreoffice unzip
+
+pip3 install boto3 flask
+
+```
+
+(Installing LibreOffice is the simplest way to get a robust DOCX→PDF converter. `libreoffice --headless --convert-to pdf` will do the conversion.)
+
+---
+
+### Step 6 — Give EC2 an IAM role (recommended)
+
+Create an IAM role and attach it to the EC2 instance so your code can access S3, SQS, DynamoDB and SNS without embedding credentials.
+
+Minimal IAM policy example (attach to the EC2 role; replace ARNs):
+
+```json
+
+{
+
+&nbsp;"Version":"2012-10-17",
+
+&nbsp;"Statement":\[
+
+&nbsp;  {"Effect":"Allow","Action":\["s3:GetObject","s3:PutObject"],"Resource":\["arn:aws:s3:::myproject-uploads-<yourname>-2025/\*","arn:aws:s3:::myproject-converted-<yourname>-2025/\*"]},
+
+&nbsp;  {"Effect":"Allow","Action":\["sqs:ReceiveMessage","sqs:DeleteMessage","sqs:GetQueueAttributes","sqs:ChangeMessageVisibility"],"Resource":"arn:aws:sqs:us-east-1:123456789012:file-conversion-queue"},
+
+&nbsp;  {"Effect":"Allow","Action":\["dynamodb:PutItem","dynamodb:GetItem","dynamodb:UpdateItem"],"Resource":"arn:aws:dynamodb:us-east-1:123456789012:table/Files"},
+
+&nbsp;  {"Effect":"Allow","Action":\["sns:Publish"],"Resource":"arn:aws:sns:us-east-1:123456789012:file-conversion-notifications"}
+
+&nbsp;]
+
+}
+
+```
+
+(You can tighten permissions later.)
+
+---
+
+### Step 7 — Website to accept uploads (simple Flask app)
+
+On the same EC2 instance you can run this tiny Flask app to upload files into your uploads bucket:
+
+Create `/home/ubuntu/app.py`:
+
+```python
+
+\# app.py
+
+from flask import Flask, request
+
+import boto3, uuid
+
+
+
+app = Flask(\_\_name\_\_)
+
+s3 = boto3.client('s3')
+
+UPLOAD\_BUCKET = 'myproject-uploads-<yourname>-2025'
+
+
+
+@app.route('/')
+
+def form():
+
+&nbsp;   return '<form method="post" enctype="multipart/form-data"><input type="file" name="file"><input type="submit"></form>'
+
+
+
+@app.route('/', methods=\['POST'])
+
+def upload():
+
+&nbsp;   f = request.files\['file']
+
+&nbsp;   key = f'uploads/{uuid.uuid4()}\_{f.filename}'
+
+&nbsp;   s3.upload\_fileobj(f, UPLOAD\_BUCKET, key)
+
+&nbsp;   return f'Uploaded {key} — worker will convert it automatically.'
+
+
+
+if \_\_name\_\_ == '\_\_main\_\_':
+
+&nbsp;   app.run(host='0.0.0.0', port=80)
+
+```
+
+Run it: `sudo python3 app.py` (or use systemd / gunicorn for production).
+
+When you POST a file here, it will be uploaded to S3 — that triggers S3 → SQS.
+
+---
+
+### Step 8 — Worker script (poll SQS, convert, upload, update DB, notify)
+
+Create `/home/ubuntu/worker.py`:
+
+```python
+
+\# worker.py
+
+import boto3, json, os, subprocess, uuid, time
+
+sqs = boto3.client('sqs')
+
+s3 = boto3.client('s3')
+
+dynamodb = boto3.resource('dynamodb')
+
+sns = boto3.client('sns')
+
+
+
+QUEUE\_URL = 'https://sqs.us-east-1.amazonaws.com/123456789012/file-conversion-queue'
+
+CONVERTED\_BUCKET = 'myproject-converted-<yourname>-2025'
+
+TABLE\_NAME = 'Files'
+
+SNS\_ARN = 'arn:aws:sns:us-east-1:123456789012:file-conversion-notifications'
+
+
+
+table = dynamodb.Table(TABLE\_NAME)
+
+
+
+def convert\_docx\_to\_pdf(local\_in\_path):
+
+&nbsp;   # LibreOffice will write file in same outdir with .pdf extension
+
+&nbsp;   subprocess.run(\['libreoffice', '--headless', '--convert-to', 'pdf', '--outdir', '/tmp', local\_in\_path], check=True)
+
+&nbsp;   base = os.path.splitext(os.path.basename(local\_in\_path))\[0] + '.pdf'
+
+&nbsp;   return '/tmp/' + base
+
+
+
+while True:
+
+&nbsp;   resp = sqs.receive\_message(QueueUrl=QUEUE\_URL, MaxNumberOfMessages=1, WaitTimeSeconds=10)
+
+&nbsp;   messages = resp.get('Messages', \[])
+
+&nbsp;   if not messages:
+
+&nbsp;       time.sleep(1)
+
+&nbsp;       continue
+
+&nbsp;   msg = messages\[0]
+
+&nbsp;   receipt = msg\['ReceiptHandle']
+
+&nbsp;   body = json.loads(msg\['Body'])
+
+&nbsp;   # S3 Event inside the body
+
+&nbsp;   record = body\['Records']\[0]
+
+&nbsp;   bucket = record\['s3']\['bucket']\['name']
+
+&nbsp;   key = record\['s3']\['object']\['key']
+
+&nbsp;   local\_path = '/tmp/' + os.path.basename(key)
+
+&nbsp;   print("Downloading", bucket, key)
+
+&nbsp;   s3.download\_file(bucket, key, local\_path)
+
+&nbsp;   pdf\_path = convert\_docx\_to\_pdf(local\_path)
+
+&nbsp;   converted\_key = 'converted/' + os.path.basename(pdf\_path)
+
+&nbsp;   s3.upload\_file(pdf\_path, CONVERTED\_BUCKET, converted\_key)
+
+&nbsp;   # store metadata
+
+&nbsp;   fileId = str(uuid.uuid4())
+
+&nbsp;   table.put\_item(Item={
+
+&nbsp;       'fileId': fileId,
+
+&nbsp;       'originalS3': f's3://{bucket}/{key}',
+
+&nbsp;       'convertedS3': f's3://{CONVERTED\_BUCKET}/{converted\_key}',
+
+&nbsp;       'status': 'done'
+
+&nbsp;   })
+
+&nbsp;   # notify
+
+&nbsp;   sns.publish(TopicArn=SNS\_ARN, Subject='Conversion done', Message=f'Your file {key} was converted.')
+
+&nbsp;   # delete message from queue
+
+&nbsp;   sqs.delete\_message(QueueUrl=QUEUE\_URL, ReceiptHandle=receipt)
+
+&nbsp;   print("Done:", key)
+
+```
+
+Run it: `python3 worker.py` (keep it running). It polls SQS and handles conversions.
+
+**Important:** ensure `/tmp` has enough space for the files; remove temp files if necessary.
+
+---
+
+### Step 9 — Test end-to-end
+
+1. Open your EC2 website in a browser and upload a `.docx`.
+2. Check SQS (Console) — you should see messages being received then removed.
+3. Look in the converted S3 bucket — a PDF should appear in `converted/`.
+4. Check DynamoDB for the item.
+5. Check your email for the SNS notification.
+
+---
+
+## Troubleshooting tips
+
+* **No messages in SQS?** Make sure S3 event notification is configured and the SQS queue policy allows S3 to send messages (the policy must allow `s3.amazonaws.com` as principal and include the bucket ARN in the condition).
+* **Permission errors?** Use an IAM role attached to EC2; make sure the role has S3, SQS, DynamoDB, SNS permissions.
+* **Conversion fails?** Try running the LibreOffice command manually: `libreoffice --headless --convert-to pdf --outdir /tmp /tmp/your.docx`.
+* **Large files / concurrency:** EC2 worker is single-process; you can scale by running multiple workers or use ECS/Lambda container solution.
+
+---
+
+# Short note on serverless alternatives (if you want to avoid EC2)
+
+* **Lambda container image**: You can create an AWS Lambda function as a container image that includes LibreOffice binary. Lambda container images can be big (up to 10 GB) so you can bundle the converter. The Lambda can be triggered by SQS (configured as Lambda event source) and do the same steps. This is more advanced to set up initially but gives true serverless scaling.
+* **Third-party API**: Use a service like CloudConvert for conversion: easier (no binaries) but costs money and involves sending documents to an external service.
+* **Pure Lambda without LibreOffice**: Not recommended unless you only convert simple formats supported by pure Python libraries (PDF generation from text/HTML is easy; DOCX→PDF reliably requires LibreOffice or a third-party API).
+
+---
+
+# Checklist (quick)
+
+* [ ] Upload bucket created + S3 → SQS notification configured.
+* [ ] SQS queue exists and has policy allowing S3.
+* [ ] Converted bucket created.
+* [ ] DynamoDB table created.
+* [ ] SNS topic + subscription created.
+* [ ] EC2 instance launched with IAM role and LibreOffice installed.
+* [ ] Flask upload page deployed.
+* [ ] Worker script running and converting.
+
+---
+
+If you want, I can:
+
+* Give you exact AWS Console clicks for any of the steps, or
+* Convert the worker into a Lambda container recipe (Dockerfile + handler), or
+* Provide a presigned-upload-enabled browser front-end instead of Flask.
+
+Which one would you like me to expand into code next? (I’ll assume you want the EC2 approach unless you say otherwise.)

@@ -1,0 +1,31 @@
+TASK - 3 :
+
+try auto scaling group in linux / ubuntu
+try auto scaling group in windows also - how to increase CPU utiliaztion
+
+
+1. auto scaling group 
+2. need - launch template - ami, inst.type,key,security group
+3. need or attach - load balancer (with target group)
+
+after completing ASG
+Delete the 
+1. Auto SG
+2. Launch template
+3. load balacner
+4. target group
+5. instances created by ASG.
+
+🔹 How It All Works Together
+
+Launch Template (Recipe) → defines how each new chef/server is set up.
+Auto Scaling Group (Manager) → decides how many chefs/servers should be working.
+Target Group (Staff List) → keeps track of all active chefs/servers.
+Load Balancer (Cashier) → sends customers to the right chef/server evenly.
+
+
+Target Group:
+- it is like a list of servers (EC2 instances, containers, or IPs) that a Load Balancer can send traffic to.
+- If a server doesn’t respond, the Target Group marks it as unhealthy. The Load Balancer will then stop sending requests to that bad server.
+- Target Groups run regular health checks on each server. Only servers that respond correctly are marked “healthy,” and only those get traffic.
+
