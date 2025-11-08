@@ -1,0 +1,353 @@
+1.  diff public vs private subnet - subnet
+2.  inline policy and roles - IAM
+3.  Resorce pooling - aws general
+4.  key pair - ec2
+5.  how many subnet created in single vpc - vpc (200 subnets)
+6.  how many vpc created in single region - 5 
+	In AWS, Reserved IP addresses: AWS automatically reserves the first 4 and the last IP address in each subnet
+7.  iam purpose
+8.  diff region, AZs and edge location
+9.  S3 & EBS 
+10.  Scalability and elasticity
+11. direct connect
+12. AMI
+13. snapshot
+----
+14. IAAS, PAAS, SAAS, Faas (Lambda)
+: | Concept                | Description                                              |
+| ---------------------- | -------------------------------------------------------- |
+| **Guest OS**           | The operating system running inside your virtual machine |
+| **Runs On**            | AWS-managed hypervisor                                   |
+| **Managed By**         | You (in EC2)                                             |
+| **Why Manage It?**     | For security, performance, compliance, and app stability |
+| **AWS Responsibility** | Hardware, hypervisor, and infrastructure availability    |
+
+---------------------------
+AWS storage:
+
+S3 & Glacier → Object storage.
+EBS & Instance Store → Block storage.
+EFS & FSx → File storage.
+Backup, Storage Gateway, Snow Family → Backup & hybrid storage.
+----
+
+Labs Commands:-
+ping 8.8.8.8 -c 5
+traceroute 8.8.8.8
+netstat -tp
+sudo yum install telnet -y
+telnet www.google.com 80
+curl -vLo /dev/null https://aws.com
+
+*  `ping 8.8.8.8 -c 5`  → Checks if Google’s server at `8.8.8.8` is reachable by sending 5 test messages.
+*  `traceroute 8.8.8.8`  → Shows the path and stops your data takes to reach Google’s server.
+*  `netstat -tp`  → Lists active TCP connections and which program is using them.
+*  `sudo yum install telnet -y`  → Installs the Telnet tool automatically on Linux.
+*  `telnet www.google.com 80`  → Connects directly to Google’s web server on port 80 (HTTP).
+*  `curl -vLo /dev/null https://aws.com`  → Tests a website request with details, without saving the page.
+----------------------------
+
+ANSWERS:-
+
+In the **AWS EC2 console**, when you see **“3/3 checks passed”** for an instance, it means that your instance has successfully passed all three health checks that AWS performs:-
+
+1. **System Status Check**
+   * Verifies that the AWS infrastructure hosting your instance is working properly.
+   * Example: Power, networking, and hardware in the Availability Zone.
+   * If this fails, the issue is on AWS’s side.
+2. **Instance Status Check**
+   * Verifies that your EC2 instance’s operating system is reachable and responding.
+   * Example: The virtual machine boots, responds to network pings, and the OS is accessible.
+   * If this fails, the issue is usually inside your instance (e.g., OS crash, kernel panic, firewall misconfig).
+3. **Instance Reachability Check** (sometimes called the **Instance Reachability Health Check**)
+   * Ensures that your instance can be reached from the internal AWS network.
+   * Checks that the instance's network stack is working and traffic can flow in/out as expected.
+
+✅ **3/3 checks passed** means:
+* The AWS infrastructure is healthy.
+* Your instance’s OS is up and responding.
+* The instance’s network is reachable.
+	- Basically, it indicates your instance is in a **healthy and fully operational state**.
+
+------------------------------
+### 1. Public vs Private Subnet (VPC)
+* **Public Subnet**: 
+	A subnet that has a route to the internet via an **Internet Gateway (IGW)**. 
+	EC2 instances here can be accessed directly from the internet (if they have public IPs).
+* **Private Subnet**: 
+	No direct internet access. 
+	To reach the internet, resources must go through a **NAT Gateway/Instance** in a public subnet.
+
+👉 **Why?** 
+Separation improves security — public-facing apps in public subnets, databases in private subnets.
+
+
+### 2. Inline Policy vs Role (IAM)
+* **Inline Policy**: A policy directly attached to a single IAM user, group, or role (not reusable).
+* **Role**: An IAM identity with permissions policies that **can be assumed** by trusted entities (like EC2, Lambda, or users).
+
+👉 **Why?** Roles allow temporary credentials and are safer than embedding long-term keys.
+
+
+### 3. Resource Pooling (AWS General)
+	- In a single physical server, multiple resources can be launched like s3, ec2 instance, databases.
+	- a different resources are available in single physical resources. we have pool of resources inside a hardware servers.
+	- In **cloud computing**, resource pooling means AWS shares compute, storage, and networking across multiple customers using a **multi-tenant model**, while still isolating each customer securely.
+
+👉 **Why?** Efficient use of hardware, scalability, and cost-effectiveness.
+
+
+### 4. Key Pair (EC2)
+	- it consists of a PUBLIC key (master key) stored in AWS and a PRIVATE key (customer key) are downloaded by you. It can be download only once when launching instance.
+	- Used for SSH (Linux) or RDP (Windows) login to EC2 instances.
+👉 **Why?** Secure access without passwords.
+
+### 5. How Many Subnets in One VPC
+	- Default: up to 200 subnets per VPC (default limit, can be increased when requested to AWS).
+
+### 6. How Many VPCs per Region
+	- Default quota: 5 VPCs per region (can be increased by request).
+
+### 7. IAM - (Identity and Access Management) 
+	- used for security and administration.
+	- manages **users, groups, roles, and permissions**.
+👉 **Purpose:** Control **who can do what** in AWS securely.
+
+### 8. Difference: Region, AZ, and Edge Location
+	- Region : A geographic area (e.g., us-east-1).
+	- Availability Zone (AZ) : Isolated data centers **within a region** (for high availability).
+	- Edge Location: Isolated from normal Data center from region. it is a Content delivery endpoints (used by CloudFront, Route 53) near users. it only stores the copies of original content (like a cache). We cannot store any data in here only receive the data from it.
+👉 **Why?** Regions = location choice, AZs = redundancy, edge = low-latency content delivery.
+-------
+### 9. S3 vs EBS
+* **S3 (Simple Storage Service)**: Object storage, unlimited, used for static files, backups, big data. Accessible via URL/API.
+* **EBS (Elastic Block Store)**: Block storage, used as virtual hard disks for EC2. Limited to a single AZ.
+👉 **Why?** Use S3 for scalable storage, EBS for EC2 persistent disks.
+---
+### 10. Scalability vs Elasticity
+* **Scalability**: System can handle increased load by adding resources (vertical/horizontal).
+* **Elasticity**: Automatic scaling **up and down** based on demand.
+👉 **Why?** Scalability = growth-ready, Elasticity = cost-saving.
+---
+### 11. Direct Connect
+AWS **Direct Connect** provides a **dedicated private network connection** between your on-premises data center and AWS.
+👉 **Why?** Lower latency, higher bandwidth, more secure than internet VPN.
+---
+### 12. AMI (Amazon Machine Image)
+An **AMI** is a pre-configured template for launching EC2 instances (OS + software + settings).
+👉 **Why?** Faster and consistent deployments.
+---
+### 13. Snapshot (EBS)
+A **snapshot** is a **point-in-time backup** of an EBS volume, stored in S3.
+👉 **Why?** For backup, restore, and creating new volumes in same/different AZs.
+---
+
+
+
+LABS NOTES:
+-----
+ Part 1 – AWS Cloud Foundations**
+
+**1. What are IaaS, PaaS, and SaaS?**
+
+* **IaaS (Infrastructure as a Service):** Provides virtualized computing resources like servers, storage, and networking. Example: Amazon EC2.
+* **PaaS (Platform as a Service):** Provides a platform to develop, run, and manage applications without managing infrastructure. Example: AWS Elastic Beanstalk.
+* **SaaS (Software as a Service):** Delivers fully managed applications over the internet. Example: Amazon Chime, WorkMail.
+
+**2. What are the advantages of cloud computing?**
+
+* Pay-as-you-go pricing
+* Elasticity and scalability
+* High availability and reliability
+* Security at scale
+* Global reach
+
+**3. What is an AWS Region?**
+A physical location worldwide where AWS has multiple data centers.
+
+**4. What is an Availability Zone (AZ)?**
+One or more discrete data centers within a Region, with independent power, networking, and connectivity.
+
+**5. What are all the AWS Regions?**
+There are 30+ Regions globally (e.g., US East (N. Virginia), Europe (Ireland), Asia Pacific (Tokyo)). [Exact list is updated regularly on AWS Global Infrastructure.]
+
+**6. What are the categories in which the AWS services are grouped?**
+
+* Compute
+* Storage
+* Database
+* Networking & Content Delivery
+* Security, Identity & Compliance
+* Analytics
+* AI/ML
+* Developer Tools
+* Management & Governance, etc.
+
+**7. What is the difference between object storage and block storage?**
+
+* **Object storage:** Stores data as objects (metadata + data), highly scalable, ideal for unstructured data. Example: Amazon S3.
+* **Block storage:** Stores data in fixed-size blocks, low latency, suitable for databases and OS. Example: Amazon EBS.
+
+**8. What are two AWS compute services, and what do these services do?**
+
+* **Amazon EC2:** Virtual servers in the cloud.
+* **AWS Lambda:** Serverless compute to run code without provisioning servers.
+
+**9. What are two AWS storage services, and what do these services do?**
+
+* **Amazon S3:** Scalable object storage.
+* **Amazon EBS:** Block storage for EC2 instances.
+
+---
+
+# **Part 2 – AWS Cloud Foundations**
+
+**1. What is the AWS shared responsibility model?**
+
+* AWS manages **security of the cloud** (infrastructure).
+* Customer manages **security in the cloud** (applications, data, configurations).
+
+**2. What is an AWS Identity and Access Management (IAM) role?**
+A set of temporary permissions that can be assumed by entities (users, apps, services).
+
+**3. What is an IAM policy?**
+A JSON document that defines permissions for IAM users, groups, or roles.
+
+**4. What is an Amazon Machine Image (AMI)?**
+A preconfigured template (OS + software) used to launch EC2 instances.
+
+**5. What are the different Amazon EC2 instance types, and what are use cases for each type?**
+
+* **General purpose (t3, m5):** Balanced compute/memory.
+* **Compute optimized (c5):** High-performance compute (gaming, HPC).
+* **Memory optimized (r5, x1):** Large in-memory databases.
+* **Storage optimized (i3, d2):** High-speed storage (data warehousing).
+* **Accelerated computing (p3, g4):** GPU-intensive workloads (ML, graphics).
+
+**6. What is a virtual private cloud (VPC)?**
+A logically isolated network in AWS where you can launch resources.
+
+**7. What is the difference between a public and a private subnet?**
+
+* **Public subnet:** Accessible from the internet via an internet gateway.
+* **Private subnet:** Not directly accessible from the internet.
+
+---
+
+# **AWS Well-Architected Framework**
+
+**1. What are the pillars of the AWS Well-Architected Framework?**
+
+* Operational Excellence
+* Security
+* Reliability
+* Performance Efficiency
+* Cost Optimization
+* Sustainability
+
+**2. What are the design principles for operational excellence?**
+
+* Automate changes
+* Make frequent, small, reversible changes
+* Anticipate failure
+* Learn from all failures
+
+**3. What are the design principles that strengthen system security?**
+
+* Implement least privilege
+* Enable traceability
+* Automate security best practices
+* Apply security at all layers
+
+**4. What are the design principles that increase reliability?**
+
+* Test recovery procedures
+* Automatically recover from failure
+* Scale horizontally
+* Stop guessing capacity
+
+**5. What are the factors that influence performance efficiency?**
+
+* Select the right resource type and size
+* Use managed services
+* Optimize for evolving needs
+* Use serverless architectures
+
+**6. What are the different focus areas for cost-effective optimization?**
+
+* Use cost-effective resources
+* Increase expenditure awareness
+* Optimize over time
+* Use managed services
+
+**7. What are the design principles that support sustainability?**
+
+* Use efficient resources
+* Reduce impact by scaling on demand
+* Optimize workloads for energy efficiency
+* Reduce idle resources
+
+---
+
+# **AWS CloudFormation**
+
+**1. What is configuration orchestration?**
+Automating deployment of infrastructure resources in a predefined order.
+
+**2. What is configuration management, and what are some tools?**
+Managing system software and configurations. Tools: Ansible, Puppet, Chef.
+
+**3. What is continuous integration (CI)?**
+Automated testing and integration of code changes frequently.
+
+**4. What is continuous delivery (CD)?**
+Automated release process to deploy code safely to production.
+
+**5. What is AWS CloudFormation, and what are three advantages?**
+A service for defining and provisioning infrastructure as code.
+Advantages:
+
+* Automates resource creation
+* Ensures consistency
+* Supports version control
+
+**6. What is JSON and YAML, and what are the differences?**
+
+* **JSON:** Strict, machine-friendly, widely used.
+* **YAML:** Human-readable, flexible formatting.
+  Differences:
+
+1. Syntax (JSON uses `{}`, YAML uses indentation).
+2. Readability (YAML is easier for humans).
+3. Verbosity (JSON more verbose).
+
+**7. What is a stack in CloudFormation?**
+A collection of AWS resources that you manage as a single unit.
+
+---
+
+# **AWS Billing**
+
+**1. What are the different types of AWS support plans?**
+
+* Basic (free)
+* Developer
+* Business
+* Enterprise On-Ramp
+* Enterprise
+
+**2. What is the AWS Pricing Calculator?**
+An online tool to estimate AWS costs based on selected services.
+
+**3. What are the different Amazon EC2 pricing models?**
+
+* **On-Demand:** Pay per hour/second, no commitment.
+* **Savings Plans/Reserved Instances:** Commit for 1–3 years, lower cost.
+* **Spot Instances:** Buy unused capacity at up to 90% discount.
+* **Dedicated Hosts/Instances:** Physical servers for compliance/licensing.
+
+---
+ 
+
+
+
